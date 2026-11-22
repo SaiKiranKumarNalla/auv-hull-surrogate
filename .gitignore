@@ -1,0 +1,12 @@
+data/
+results/raw/
+*.h5
+*.npy
+*.ckpt
+.venv/
+__pycache__/
+.env
+private/
+knowledge/papers/pdf/
+reference/
+.venv
