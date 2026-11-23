@@ -121,7 +121,7 @@ Plan: [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md) · Literature: [docs/REFERENCES.m
 ## Reproduce
 
 ```bash
-python -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn torch matplotlib manifold3d jupyterlab
+python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python design/quality.py          # geometry gate on the 20 core designs
 .venv/bin/python design/variants.py         # 200 gated variants
 ```
@@ -131,4 +131,15 @@ see [docs/REPLICATION.md](docs/REPLICATION.md).
 ## Data and licence
 
 The Pilot A dataset and reference code belong to Vardhan et al. (GPL-3.0); they are not included and are cloned into
-the git-ignored `reference/`. All code in this repository was written independently.
+the git-ignored `reference/`. All code in this repository was written independently and is released under the [MIT licence](LICENSE).
+
+## Contact
+
+**Sai Kiran Kumar Nalla, PhD** · medical imaging, physics-AI and simulation · Toulouse, France
+
+[LinkedIn](https://www.linkedin.com/in/sai-kiran-kumar-nalla-3a325314a/) ·
+[Portfolio](https://saikirankumarnalla.github.io) ·
+[Google Scholar](https://scholar.google.com/citations?user=vwCkGDgAAAAJ) ·
+saikirankumarnalla@gmail.com
+
+Questions, issues and collaboration ideas are welcome: open a [GitHub issue](../../issues) or get in touch.
