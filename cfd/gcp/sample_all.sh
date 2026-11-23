@@ -5,8 +5,8 @@ OF=$(ls -d /usr/lib/openfoam/openfoam* | sort | head -1)
 one() {
   source "$2/etc/bashrc"; cd "$1" || exit
   cp ~/sample_planes.dict system/planes; cp ~/sample_mesh.dict system/meshcut
-  postProcess -dict system/planes -latestTime > log.sample 2>&1
-  postProcess -dict system/meshcut -latestTime > log.meshcut 2>&1
+  postProcess -dict system/planes -fields '(p U)' -latestTime > log.sample 2>&1
+  postProcess -dict system/meshcut -fields '(p U)' -latestTime > log.meshcut 2>&1
   echo "$(basename "$1") $?"
 }
 export -f one

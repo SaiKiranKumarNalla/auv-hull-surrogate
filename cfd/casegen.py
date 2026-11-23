@@ -32,7 +32,7 @@ def field(name, cls, dims, internal, walls_bc, body_bc):
             + sides + f'    body\n    {{\n{body_bc}    }}\n    #includeEtc "caseDicts/setConstraintTypes"\n}}\n')
 
 
-def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, levels=(5, 7), max_cells=3_000_000):
+def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, levels=(5, 7), max_cells=1_000_000):
     case = os.path.join(out, name)
     man = ap.build(design)
     os.makedirs(os.path.join(case, 'constant', 'triSurface'), exist_ok=True)
@@ -226,7 +226,7 @@ wallDist { method meshWave; }
 }
 SIMPLE
 {
-    nNonOrthogonalCorrectors 5;
+    nNonOrthogonalCorrectors 2;
     consistent no;
     residualControl { p 1e-4; U 1e-4; "(k|omega)" 1e-4; }
 }
@@ -266,6 +266,7 @@ runParallel snappyHexMesh -overwrite
 runParallel checkMesh
 restore0Dir -processor
 runParallel simpleFoam
+runApplication reconstructParMesh -constant
 runApplication reconstructPar -latestTime
 touch done.flag
 """)
