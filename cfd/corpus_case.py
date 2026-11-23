@@ -63,6 +63,7 @@ def first_layer(Re, y_plus=30):
 
 
 def make_case(design, name, orient, Re, out):
+    cap = globals()['ITER_CAP']
     yaw, pitch = ORIENTATIONS[orient]
     case = os.path.join(out, name, f'{orient}_Re{Re:.0e}'.replace('+0', '').replace('+', ''))
     V, F, info = body(design, yaw, pitch)
@@ -89,10 +90,10 @@ def make_case(design, name, orient, Re, out):
 startFrom latestTime;
 startTime 0;
 stopAt endTime;
-endTime {ITER_CAP};
+endTime {cap};
 deltaT 1;
 writeControl timeStep;
-writeInterval {ITER_CAP};
+writeInterval {cap};
 purgeWrite 1;
 writeFormat binary;
 writeCompression on;
@@ -234,11 +235,13 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('base'); p.add_argument('variant', type=int); p.add_argument('--out', default='runs/pilot')
     p.add_argument('--box', default='-2,4,2', help='x_min,x_max,half_width in body lengths (default 6 L x 4 L x 4 L)')
+    p.add_argument('--cap', type=int, default=ITER_CAP, help='iteration cap')
     p.add_argument('--only', default='', help='comma list of orientation_Re ids, e.g. front_Re3e6,side_Re3e6')
     a = p.parse_args()
     x0, x1, hw = map(float, a.box.split(','))
     BOX.update(x=(x0, x1), y=(-hw, hw), z=(-hw, hw))
     only = set(filter(None, a.only.split(',')))
+    ITER_CAP = a.cap
     d = json.load(open(os.path.join(HERE, '..', 'design', 'variants', a.base, f'v{a.variant:02d}.json')))
     name = f'{a.base}_v{a.variant:02d}'
     for o in ORIENTATIONS:
