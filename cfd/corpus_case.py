@@ -24,9 +24,14 @@ from casegen import head, write, field
 BOX = dict(x=(-2.0, 4.0), y=(-2.0, 2.0), z=(-2.0, 2.0))
 BASE = 0.107
 TURB_I, NUT_RATIO = 0.041, 100.0           # inlet intensity and nu_t/nu as in the paper case (k 0.01, omega 57 at 2 m/s)
-ORIENTATIONS = {'front': (0, 0), 'yaw10': (10, 0), 'yaw30': (30, 0)}
+ORIENTATIONS = {'front': (0, 0), 'yaw5': (5, 0), 'yaw10': (10, 0), 'yaw20': (20, 0), 'yaw30': (30, 0),
+                'pitch10': (0, 10), 'pitch20': (0, 20), 'pitchm10': (0, -10), 'yaw10pitch10': (10, 10)}
 # side (90, 0) and top (0, 90) removed 2026-11-23: broadside flow sheds vortices, steady RANS cannot settle
 RES = (1e6, 3e6, 1e7)
+# the 15 corpus conditions (orientation, Re), fixed 2026-11-23 (plan/STUDY_PLAN.md)
+CONDITIONS = ([(o, Re) for o in ('front', 'yaw10', 'yaw20') for Re in RES]
+              + [('pitch10', 3e6), ('pitch20', 3e6), ('yaw10pitch10', 3e6), ('yaw30', 3e6), ('yaw5', 3e6), ('pitchm10', 3e6)])
+assert len(CONDITIONS) == 15
 ITER_CAP, ITER_MIN = 600, 200
 
 
@@ -245,8 +250,7 @@ if __name__ == '__main__':
     ITER_CAP = a.cap
     d = json.load(open(os.path.join(HERE, '..', 'design', 'variants', a.base, f'v{a.variant:02d}.json')))
     name = f'{a.base}_v{a.variant:02d}'
-    for o in ORIENTATIONS:
-        for Re in RES:
+    for o, Re in CONDITIONS:
             tag = f'{o}_Re{Re:.0e}'.replace('+0', '').replace('+', '')
             if only and tag not in only:
                 continue

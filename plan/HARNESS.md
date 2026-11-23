@@ -9,7 +9,7 @@ flowchart LR
     G -->|pass| M["Mesher<br/>snappyHexMesh<br/>~700K recipe"]
     G -->|fail| X1["rejected.csv"]
     M --> Q1["Mesh gate<br/>checkMesh · layers ≥ 85 %"]
-    Q1 -->|pass| SO["Solver<br/>simpleFoam<br/>13 conditions, mapped starts"]
+    Q1 -->|pass| SO["Solver<br/>simpleFoam<br/>15 conditions"]
     Q1 -->|fail| X2["rejected.csv"]
     SO --> Q2["Result gate<br/>converged band · y⁺ range"]
     Q2 --> DB[("Corpus database<br/>forces · fields · recipe")]
@@ -70,7 +70,7 @@ from the case Reynolds number, repeatable decomposition. Gate: `checkMesh` passe
 
 ## Stage 4: solver and result gate
 
-One mesh per shape. The 13 conditions run in sequence, each mapped from the previous solution. Stop rule:
+One mesh per shape and condition (the body is rotated, and the wall layer depends on Re). Stop rule:
 drag band < 0.1 % over 100 iterations, capped at 600 iterations; the band is stored as an uncertainty.
 Result gate: band < 1 %, mean y⁺ in 20–60.
 
