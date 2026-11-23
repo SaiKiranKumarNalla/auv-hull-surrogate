@@ -112,4 +112,7 @@ if __name__ == '__main__':
     root = sys.argv[1] if len(sys.argv) > 1 else 'runs/sample_paper'
     for c in sorted(glob.glob(os.path.join(root, '*/'))):
         if os.path.exists(os.path.join(c, 'case.json')):
-            print(os.path.basename(c.rstrip('/')), [os.path.basename(f) for f in mesh_pictures(c)])
+            try:
+                print(os.path.basename(c.rstrip('/')), [os.path.basename(f) for f in mesh_pictures(c)])
+            except Exception as e:
+                print(os.path.basename(c.rstrip('/')), 'FAILED', e)
