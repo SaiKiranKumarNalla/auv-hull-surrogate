@@ -1,0 +1,21 @@
+design,ok,failures,repairs,volume_L,area_m2,genus,parts,slope_jump,sharp_edge_pct,min_edge_mm,n_triangles,min_tip_mm
+remus100_finned,True,,,31.7577,0.7556,0,1,0.0,1.005,0.0001,57312,5.4
+suboff_bare,True,,,681.9562,5.8666,0,1,0.7896,0.0,0.0001,42240,nan
+suboff_appended,True,,,688.4007,6.2442,0,1,0.7896,0.7482,0.0001,55600,46.0
+vardhan_swordfish1,True,,,2.046,0.1654,0,1,0.0382,0.1515,0.0001,42240,nan
+myring_blunt_n5,True,,,33.4015,0.7981,0,1,0.0,1.0044,0.0001,57080,8.022
+myring_slender_ld15,True,,,20.5372,0.7048,0,1,0.0,0.8721,0.0001,57792,5.334
+myring_fat_ld5,True,,,25.0074,0.6092,0,1,0.0,0.6408,0.0001,57424,8.4
+naca0014_body,True,,,21.0604,0.6007,0,1,0.0,1.0587,0.0001,57680,8.022
+von_karman,True,,,28.5426,0.7148,0,1,0.0,0.7357,0.0001,57272,8.022
+lv_haack,True,,,29.7596,0.7354,0,1,0.0,0.8309,0.0001,57768,8.022
+elliptic_parabolic,True,,,32.8421,0.7856,0,1,0.0,0.883,0.0001,57080,8.022
+flat_stern,True,,,31.5022,0.7614,0,1,0.0,0.7164,0.0001,57320,9.6
+x_tail_flaps,True,,,31.9793,0.7965,0,1,0.0,1.2949,0.0001,58072,8.4
+tall_rudder,True,,,32.3029,0.8515,0,1,0.0,0.9609,0.0001,57308,7.2
+bow_stern_planes,True,,,29.8159,0.7532,0,1,0.0,1.0507,0.0001,64972,6.0
+tuna_like,True,,dorsal: tip chord 0.040 -> 0.049 m; pectoral: tip chord 0.030 -> 0.032 m; caudal: tip chord 0.030 -> 0.035 m,17.0855,0.5307,0,1,1.026,1.2455,0.0001,61928,2.52
+manta_like,True,,pectoral_wings: tip chord 0.050 -> 0.175 m,16.3601,0.8698,0,1,2.0762,1.7928,0.0001,38896,17.5
+swordfish_like,True,,dorsal: tip chord 0.020 -> 0.045 m; pectoral: tip chord 0.020 -> 0.028 m; caudal: tip chord 0.030 -> 0.035 m,20.4627,0.73,0,1,4.9291,0.6144,0.0001,190228,2.24
+sailfish_like,True,,pectoral: tip chord 0.020 -> 0.025 m; caudal: tip chord 0.025 -> 0.032 m,7.5033,0.4047,0,1,5.3543,0.6193,0.0001,171584,2.0
+wahoo_like,True,,pectoral: tip chord 0.020 -> 0.025 m; caudal: tip chord 0.020 -> 0.025 m,5.0221,0.2909,0,1,0.5824,1.1941,0.0001,60798,2.0

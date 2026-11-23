@@ -64,18 +64,69 @@ def hull_profile(spec):
     return hf.resample(x, r, 220) if len(x) > 220 else (x, r)
 
 
-def hull_manifold(spec, n_phi=96):
+def _smooth(v, k):
+    """Moving average with edge padding (k odd); used to round the bill-body blend."""
+    if k < 3:
+        return v
+    pad = np.pad(v, k // 2, mode='edge')
+    return np.convolve(pad, np.ones(k) / k, mode='valid')
+
+
+def hull_sections(spec):
+    """Stations x with half-width ry(x) (y) and half-height rz(x) (z) of the whole body, bill included.
+
+    The bill is not a separate part: bill and body are blended into one profile. Ahead of the body's maximum
+    thickness, ry and rz are made non-decreasing (no waist or collar where the bill meets the head) and then
+    smoothed, which acts as a fillet. A fish body whose stern ends at a finite peduncle radius is closed with a
+    rounded cap instead of a flat disc."""
     x, r = hull_profile(spec)
-    r = r.copy()
-    r[r < 1e-6] = 1e-6                                   # pointed ends -> tiny loops, then fan caps
-    X, Y, Z = hf.surface(x, r, n_phi, spec.get('width', 1.0), spec.get('height', 1.0), spec.get('p', 2.0))
+    w, h = spec.get('width', 1.0), spec.get('height', 1.0)
+    ry, rz = r * w, r * h
+    if spec['family'] == 'fish_like' and r[-1] > 1e-6:          # rounded peduncle cap
+        rp = r[-1]
+        u = np.linspace(0, 1, 12)[1:]
+        x = np.concatenate([x, x[-1] + 1.5 * rp * u])
+        cap = np.sqrt(np.clip(1 - u ** 2, 0, None))
+        ry, rz = np.concatenate([ry, ry[-1] * cap]), np.concatenate([rz, rz[-1] * cap])
+    bill = spec.get('bill')
+    if bill:
+        Lb, rb, bw = bill['length'], bill['base_radius'], bill.get('width', 1.0)
+        body_y, body_z = (lambda xx: np.interp(xx, x, ry, left=0.0)), (lambda xx: np.interp(xx, x, rz, left=0.0))
+        xu = np.linspace(-Lb, x[-1], 900)                        # even spacing so smoothing has a fixed length
+        tip = (xu + Lb) / Lb
+        zb_u = np.where(xu <= 0, rb * np.clip(tip, 1e-4, 1.0) ** 0.8, 0.0)
+        ry, rz = np.maximum(bw * zb_u, body_y(xu)), np.maximum(zb_u, body_z(xu))
+        fore = xu <= xu[np.argmax(rz)]                           # up to the body's maximum thickness
+        for v in (ry, rz):
+            v[fore] = np.maximum.accumulate(v[fore])
+        k = int(0.06 * x[-1] / (xu[1] - xu[0])) | 1              # fillet length ~6 % of body length
+        sm_y, sm_z = _smooth(ry, k), _smooth(rz, k)
+        blend = (xu > -0.3 * Lb) & fore                          # only round the junction region
+        w = np.clip((xu + 0.3 * Lb) / (0.1 * Lb), 0, 1)          # fade the smoothing in, no seam
+        ry[blend] = (1 - w[blend]) * ry[blend] + w[blend] * sm_y[blend]
+        rz[blend] = (1 - w[blend]) * rz[blend] + w[blend] * sm_z[blend]
+        x = xu
+    return x, ry, rz
+
+
+def hull_manifold(spec, n_phi=96):
+    x, ry, rz = hull_sections(spec)
+    ry, rz = np.maximum(ry, 1e-6), np.maximum(rz, 1e-6)        # pointed ends -> tiny loops, then fan caps
+    p = spec.get('p', 2.0)
+    phi = np.linspace(0, 2 * np.pi, n_phi, endpoint=False)
+    c, s_ = np.cos(phi), np.sin(phi)
+    cy, sz = np.sign(c) * np.abs(c) ** (2 / p), np.sign(s_) * np.abs(s_) ** (2 / p)   # superellipse (p = 2: ellipse)
+    Y, Z = np.outer(ry, cy), np.outer(rz, sz)
+    X = np.repeat(x[:, None], n_phi, axis=1)
     return to_manifold(*grid_mesh(np.stack([X, Y, Z], -1)))
 
 
 def hull_radius(spec, x0, roll):
-    """Distance from the axis to the hull surface at station x0 in direction `roll` (elliptic sections allowed)."""
-    x, r = hull_profile(spec)
-    return np.interp(x0, x, r) * hf.section_scale(roll, spec.get('width', 1.0), spec.get('height', 1.0), spec.get('p', 2.0))
+    """Distance from the axis to the hull surface at station x0 in direction `roll`."""
+    x, ry, rz = hull_sections(spec)
+    a, b = np.interp(x0, x, ry), np.interp(x0, x, rz)
+    p = spec.get('p', 2.0)
+    return 1.0 / (np.abs(np.cos(roll) / max(a, 1e-9)) ** p + np.abs(np.sin(roll) / max(b, 1e-9)) ** p) ** (1.0 / p)
 
 
 # ---------- fins ----------
@@ -97,7 +148,10 @@ def _rotate(xs, ys, x0, deg, mask=None):
     return xs, ys
 
 
-def fin_manifold(fin, hull_spec, roll_deg, n_span=12):
+def fin_manifold(fin, hull_spec, roll_deg, n_span=14, fillet=0.12, n_fillet=5, n_tip=5):
+    """One fin. Root: embedded in the hull and flared over `fillet` x root chord (thicker and longer sections near
+    the hull, a fillet without a boolean). Tip: rounded in planform and thickness over the outer part of the span,
+    so no flat, knife-edged tip face. Total span is unchanged."""
     roll = np.radians(roll_deg)
     cr, ct, span = fin['root_chord'], fin['tip_chord'], fin['span']
     sweep = np.tan(np.radians(fin.get('sweep_deg', 0.0)))
@@ -109,14 +163,25 @@ def fin_manifold(fin, hull_spec, roll_deg, n_span=12):
         hinge = 1 - fin['flap_fraction']
         xs0, ys0 = _rotate(xs0, ys0, hinge, fin['flap_deg'], xs0 > hinge)
     xs0, ys0 = _rotate(xs0, ys0, 0.25, fin.get('deflection_deg', 0.0))
-    stations = np.concatenate([[r_root], r_surf + span * np.linspace(0, 1, n_span)])
+    hf_ = min(fillet * cr, 0.3 * span)                   # fillet height
+    cap = min(0.5 * ct, 0.25 * span)                     # tip rounding length
+    q = np.concatenate([np.linspace(0, 1, n_fillet) * hf_ / span,
+                        np.linspace(hf_ / span, 1 - cap / span, n_span)[1:],
+                        1 - cap / span + cap / span * np.sin(np.linspace(0, np.pi / 2, n_tip + 1)[1:] * 0.97)])
+    stations = np.concatenate([[r_root, r_surf - 0.02 * r_surf], r_surf + span * q])
     loops = []
     for rr in stations:
         s = np.clip((rr - r_surf) / span, 0, 1)
         c = cr + (ct - cr) * s
         le = x_le + s * span * sweep
-        X = le + c * xs0
-        T = c * ys0                                      # thickness direction (tangential)
+        f = np.clip(1 - (rr - r_surf) / max(hf_, 1e-9), 0, 1) ** 2        # 1 at/below the hull, 0 above the fillet
+        mt, mc = 1 + 1.5 * f, 1 + 0.25 * f                                 # fillet: thicker, slightly longer
+        u = np.clip((rr - r_surf - (span - cap)) / max(cap, 1e-9), 0, 1)  # 0 below the tip zone, 1 at the tip
+        g = np.sqrt(np.clip(1 - u ** 2, 0.02, 1))                          # elliptic tip rounding
+        cm = c * mc * g
+        le = le + 0.5 * (c - cm)                                           # shrink/grow about mid-chord
+        X = le + cm * xs0
+        T = c * ys0 * mt * g                             # thickness direction (tangential)
         loops.append(np.stack([X, rr * np.cos(roll) - T * np.sin(roll), rr * np.sin(roll) + T * np.cos(roll)], -1))
     return to_manifold(*grid_mesh(np.array(loops)))
 
@@ -132,10 +197,13 @@ def bill_manifold(bill, hull_spec, n=24, n_phi=48):
 
 
 # ---------- assembly ----------
-def build(design):
+def build(design, repair=True):
+    """Fuse hull (bill included) and fins into one solid. With repair=True (default) the design first goes through
+    the geometry gate (design/quality.py), which clamps parameters that give needle tips or knife edges."""
+    if repair:
+        import quality
+        design, _ = quality.repair(design)
     body = hull_manifold(design['hull'])
-    if design['hull'].get('bill'):
-        body = body + bill_manifold(design['hull']['bill'], design['hull'])
     for fin in design.get('fins', []):
         for roll in fin['rolls_deg']:
             body = body + fin_manifold(fin, design['hull'], roll)

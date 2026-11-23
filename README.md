@@ -4,9 +4,11 @@ A replication of **Vardhan et al. 2023**, *Sample-Efficient and Surrogate-Based 
 Vehicle Hulls* ([arXiv 2304.12420](https://arxiv.org/abs/2304.12420)), turned into a fair scientific-ML benchmark
 on the same 3,021 OpenFOAM simulations of Myring hulls.
 
-**Phase 1 (this release):** models on the existing data, no new CFD.
-Phase 2: own OpenFOAM runs (SUBOFF validation, practical flow conditions).
-Phase 3: dynamics simulator and control.
+**Phase 1 (done):** models on the existing data, no new CFD.
+**Phase 2 (in progress):** own validated OpenFOAM pipeline (GCI 0.86 %), geometry quality gate, then a 2,600-run
+corpus for a PINN / FNO / graph-network benchmark. See [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md) and
+[plan/HARNESS.md](plan/HARNESS.md).
+Phase 3: dynamics (Fossen 6-DOF) simulator for the best designs.
 
 ![Phase 1 summary](results/phase1_summary.png)
 
