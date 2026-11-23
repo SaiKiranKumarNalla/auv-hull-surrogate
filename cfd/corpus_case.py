@@ -140,7 +140,7 @@ castellatedMeshControls
         wake {{ mode inside; levels ((1e15 2)); }}
         nearWake {{ mode inside; levels ((1e15 4)); }}
     }}
-    locationInMesh (3.51731 1.80517 1.79611);
+    locationInMesh ({BOX['x'][1] - 0.48269:.5f} {BOX['y'][1] - 0.19483:.5f} {BOX['z'][1] - 0.20389:.5f});
     allowFreeStandingZoneFaces true;
 }}
 snapControls
@@ -231,10 +231,18 @@ planes
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('base'); p.add_argument('variant', type=int); p.add_argument('--out', default='runs/pilot')
+    p.add_argument('--box', default='-2,4,2', help='x_min,x_max,half_width in body lengths (default 6 L x 4 L x 4 L)')
+    p.add_argument('--only', default='', help='comma list of orientation_Re ids, e.g. front_Re3e6,side_Re3e6')
     a = p.parse_args()
+    x0, x1, hw = map(float, a.box.split(','))
+    BOX.update(x=(x0, x1), y=(-hw, hw), z=(-hw, hw))
+    only = set(filter(None, a.only.split(',')))
     d = json.load(open(os.path.join(HERE, '..', 'design', 'variants', a.base, f'v{a.variant:02d}.json')))
     name = f'{a.base}_v{a.variant:02d}'
     for o in ORIENTATIONS:
         for Re in RES:
+            tag = f'{o}_Re{Re:.0e}'.replace('+0', '').replace('+', '')
+            if only and tag not in only:
+                continue
             c, m = make_case(d, name, o, Re, a.out)
             print(f'{os.path.relpath(c)}  bbox {np.round(m["bbox_hi"], 3).tolist()}  h1 {m["first_layer"]:.2e}')
