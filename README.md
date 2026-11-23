@@ -53,9 +53,14 @@ flowchart LR
 | **Local accuracy** | Velocity near fins and in the wake, not only drag | All probe lines within **5 %** of the finest grid |
 | **CFD** | Repeatable meshes, a convergence-based stop rule | Repeat run gives identical drag |
 
+![Flow past the AUV hull](results/pilot/flow_front_Re3e6.gif)
+
+<p align="center"><i>Pilot run: mid-plane flow past a REMUS-like hull at Re = 3×10⁶ (steady RANS). Setup, results and
+lessons: <a href="docs/PILOT.md">docs/PILOT.md</a></i></p>
+
 ![Flow fields](docs/img/flow.png)
 
-Details: [harness design](plan/HARNESS.md) · [variant ranges and gallery](plan/VARIANT_RANGES.md) ·
+Details: [pilot run](docs/PILOT.md) · [harness design](plan/HARNESS.md) · [variant ranges and gallery](plan/VARIANT_RANGES.md) ·
 [grid study](results/cfd_gridstudy/)
 
 ---

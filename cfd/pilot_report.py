@@ -11,8 +11,9 @@ import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.tri as mtri
 
-ORDER = ['front', 'yaw10', 'yaw30', 'side', 'top']
-COL = {'front': '#185FA5', 'yaw10': '#1D9E75', 'yaw30': '#BA7517', 'side': '#D85A30', 'top': '#7F77DD'}
+ORDER = ['front', 'yaw5', 'yaw10', 'yaw20', 'yaw30', 'pitch10', 'pitch20', 'pitchm10', 'yaw10pitch10']   # side/top dropped (unsteady)
+COL = {'front': '#185FA5', 'yaw5': '#5DCAA5', 'yaw10': '#1D9E75', 'yaw20': '#0F6E56', 'yaw30': '#BA7517',
+       'pitch10': '#7F77DD', 'pitch20': '#534AB7', 'pitchm10': '#D4537E', 'yaw10pitch10': '#D85A30'}
 
 
 def last_vec(path, start):
@@ -46,7 +47,7 @@ def load(case):
 
 def main(src, out):
     os.makedirs(out, exist_ok=True)
-    runs = [r for r in (load(c) for c in sorted(glob.glob(os.path.join(src, '*')))) if r]
+    runs = [r for r in (load(c) for c in sorted(glob.glob(os.path.join(src, '*')))) if r and r['orientation'] in ORDER]
     runs.sort(key=lambda r: (ORDER.index(r['orientation']), r['Re']))
     keys = ['orientation', 'Re', 'cells', 'iters', 'C_drag', 'C_side', 'C_lift', 'C_X', 'C_Y', 'C_Z',
             'Cm_roll', 'Cm_pitch', 'Cm_yaw', 'band_pct', 'mesh_gate', 'result_gate']
@@ -74,7 +75,7 @@ def main(src, out):
         if len(r['cd_hist']):
             ax.plot(r['cd_hist'] / r['cd_hist'][-1], color=COL[r['orientation']], lw=0.8, alpha=0.4 + 0.2 * np.log10(r['Re'] / 1e6))
     ax.set_ylim(0.8, 1.2); ax.set_xlabel('iteration'); ax.set_ylabel('C_drag / final value'); ax.grid(alpha=0.3)
-    ax.set_title('Convergence of drag, all 15 runs (colour = flow direction)')
+    ax.set_title(f'Convergence of drag, {len(runs)} runs (colour = flow direction)')
     plt.tight_layout(); plt.savefig(os.path.join(out, 'pilot_convergence.png'), dpi=110); plt.close()
 
     sel = [r for r in runs if abs(r['Re'] - 3e6) < 1]
