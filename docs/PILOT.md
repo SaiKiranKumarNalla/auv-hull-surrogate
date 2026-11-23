@@ -17,7 +17,7 @@ the time-averaged flow.</i></p>
 |---|---|---|
 | Non-dimensional form | Body length L = 1, U∞ = 1, ρ = 1, ν = 1/Re | One box and one mesh recipe for every shape; forces come out as coefficients |
 | Flow direction | Body rotated (yaw, pitch); flow always along +x | Same box and wake refinement for every orientation |
-| Box | 8 L long (2 L ahead of the nose, 5 L behind the tail), 5 L × 5 L cross-section | Domain-independence study below |
+| Box | 8 L long (2 L ahead of the nose, 5 L behind the tail), 5 L × 5 L cross-section, **provisional** | Confirmed or replaced by the domain-independence study below |
 | Mesh | Validated ~700K-cell recipe in units of L: base cell 0.107 L, body surface levels 5–6, near-wake box level 4 | Grid convergence from the earlier study: observed order 1.94, GCI 0.86 % |
 | Wall layers | First cell for y⁺ ≈ 30; 2 prism layers up to Re 3×10⁶, 10 at Re 10⁷ | 2 layers failed at Re 10⁷ in the pilot (coverage 1 %) |
 | Solver | OpenFOAM v2112 `simpleFoam`, k-ω SST, wall functions | Same as the paper replication |
