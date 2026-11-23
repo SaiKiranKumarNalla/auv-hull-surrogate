@@ -32,7 +32,62 @@ def field(name, cls, dims, internal, walls_bc, body_bc):
             + sides + f'    body\n    {{\n{body_bc}    }}\n    #includeEtc "caseDicts/setConstraintTypes"\n}}\n')
 
 
-def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, levels=(5, 7), max_cells=1_000_000):
+
+def layers_block(L, cond, y_plus=None, n_layers=2):
+    """addLayersControls. y_plus=None: legacy relative sizes (thickness follows each grid's cell size, so y+ and
+    coverage drift between grids). y_plus=value: absolute first-layer height from a flat-plate estimate,
+    Cf = 0.026 Re^(-1/7) (Schlichting), u_tau = U sqrt(Cf/2), first cell centre at y+ -> height 2 y+ nu / u_tau."""
+    if y_plus is None:
+        return """addLayersControls
+{
+    relativeSizes true;
+    layers { body { nSurfaceLayers 2; } }
+    expansionRatio 1.3;
+    finalLayerThickness 0.7;
+    minThickness 0.25;
+    nGrow 0;
+    featureAngle 60;
+    slipFeatureAngle 30;
+    nRelaxIter 3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+""", None
+    Re = cond['U'] * L / cond['nu']
+    cf = 0.026 * Re ** (-1 / 7)
+    utau = cond['U'] * math.sqrt(cf / 2)
+    h1 = 2 * y_plus * cond['nu'] / utau
+    return f"""addLayersControls
+{{
+    relativeSizes false;                 // absolute: same wall cell on every grid (target y+ {y_plus})
+    layers {{ body {{ nSurfaceLayers {n_layers}; }} }}
+    firstLayerThickness {h1:.4e};
+    expansionRatio 1.15;
+    minThickness {0.2 * h1:.4e};
+    nGrow 0;
+    featureAngle 150;                    // extrude round fin roots, trailing edges and the bill
+    slipFeatureAngle 45;
+    nRelaxIter 5;
+    nSmoothSurfaceNormals 3;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.8;
+    maxThicknessToMedialRatio 0.6;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+    nOuterIter 2;
+    layerTerminationAngle -180;
+}}
+""", h1
+
+def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, levels=(5, 7), max_cells=1_000_000, y_plus=None):
     case = os.path.join(out, name)
     man = ap.build(design)
     os.makedirs(os.path.join(case, 'constant', 'triSurface'), exist_ok=True)
@@ -58,6 +113,8 @@ def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, l
     S, Vol = float(man.surface_area()), float(man.volume())
     meta = dict(name=name, L=L, x_centre=xc, half_width=hmax, S_wet=S, volume=Vol, Re=U * L / nu, base_cell=cell,
                 blocks=[nx, ny, ny], condition=cond, design=design)
+    lb, h1 = layers_block(L, cond, y_plus)
+    meta.update(y_plus_target=y_plus, first_layer_m=h1)
 
     # ---------- system ----------
     write(os.path.join(case, 'system', 'controlDict'), head('dictionary', 'controlDict', 'system') + f"""application simpleFoam;
@@ -165,27 +222,7 @@ snapControls
     multiRegionFeatureSnap false;
 }}
 
-addLayersControls
-{{
-    relativeSizes true;
-    layers {{ body {{ nSurfaceLayers 2; }} }}
-    expansionRatio 1.3;
-    finalLayerThickness 0.7;
-    minThickness 0.25;
-    nGrow 0;
-    featureAngle 60;
-    slipFeatureAngle 30;
-    nRelaxIter 3;
-    nSmoothSurfaceNormals 1;
-    nSmoothNormals 3;
-    nSmoothThickness 10;
-    maxFaceThicknessRatio 0.5;
-    maxThicknessToMedialRatio 0.3;
-    minMedialAxisAngle 90;
-    nBufferCellsNoExtrude 0;
-    nLayerIter 50;
-}}
-
+{lb}
 meshQualityControls
 {{
     #includeEtc "caseDicts/mesh/generation/meshQualityDict.cfg"
