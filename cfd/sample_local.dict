@@ -1,20 +1,20 @@
 FoamFile { version 2.0; format ascii; class dictionary; object local; }
-// Local mesh-independence samples for swordfish_like (hull 0..1 m, bill to -0.7 m, caudal TE ~1.40 m).
+// Local mesh-independence samples, swordfish_like. dorsalWake / pectoralWake cross each fin wake normal to the fin plane.
 functions
 {
 lines
 {
     type sets; libs (sampling); setFormat raw; fields (p U); interpolationScheme cellPoint;
     sets
-    {
+    (
         blMid        { type uniform; axis distance; start (0.33 0 -0.1112); end (0.33 0 -0.25);  nPoints 200; }
         blTail       { type uniform; axis distance; start (0.75 0 -0.0522); end (0.75 0 -0.20);  nPoints 200; }
-        dorsalWake   { type uniform; axis distance; start (0.40 0 0.10);    end (0.40 0 0.35);   nPoints 200; }
-        pectoralWake { type uniform; axis distance; start (0.40 0.05 -0.023); end (0.40 0.32 -0.149); nPoints 200; }
+        dorsalWake   { type uniform; axis distance; start (0.42 -0.10 0.176); end (0.42 0.10 0.176); nPoints 200; }
+        pectoralWake { type uniform; axis distance; start (0.45 0.117 -0.165); end (0.45 0.201 0.017); nPoints 200; }
         caudalWake   { type uniform; axis distance; start (1.42 0 -0.40);   end (1.42 0 0.40);   nPoints 300; }
         wakeY        { type uniform; axis distance; start (2.44 -0.40 0);   end (2.44 0.40 0);   nPoints 300; }
         wakeZ        { type uniform; axis distance; start (2.44 0 -0.40);   end (2.44 0 0.40);   nPoints 300; }
-    }
+    );
 }
 planes
 {

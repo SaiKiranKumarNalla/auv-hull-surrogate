@@ -50,13 +50,19 @@ def read_line(d, name):
     t = latest(d, 'lines')
     if not t:
         return None
-    f = [p for p in glob.glob(os.path.join(t, f'{name}*')) if 'U' in os.path.basename(p) or 'p' in os.path.basename(p)]
-    if not f:
+    both = glob.glob(os.path.join(t, f'{name}_p_U.xy'))            # combined: distance p Ux Uy Uz
+    if both:
+        A = np.loadtxt(both[0], comments='#')
+        if A.ndim == 1 or A.shape[1] < 5:
+            return None
+        return A[:, 0], A[:, 1] / (0.5 * U0 ** 2), np.linalg.norm(A[:, 2:5], axis=1) / U0
+    fp, fu = os.path.join(t, f'{name}_p.xy'), os.path.join(t, f'{name}_U.xy')   # separate files (list-form sets)
+    if not (os.path.exists(fp) and os.path.exists(fu)):
         return None
-    A = np.loadtxt(sorted(f)[0], comments='#')        # distance p Ux Uy Uz  (scalars first, then vectors)
-    if A.ndim == 1 or A.shape[1] < 5:
+    P, V = np.loadtxt(fp, comments='#'), np.loadtxt(fu, comments='#')
+    if P.ndim == 1 or V.ndim == 1 or len(P) != len(V):
         return None
-    return A[:, 0], A[:, 1] / (0.5 * U0 ** 2), np.linalg.norm(A[:, 2:5], axis=1) / U0
+    return P[:, 0], P[:, 1] / (0.5 * U0 ** 2), np.linalg.norm(V[:, 1:4], axis=1) / U0
 
 
 def read_plane(d, name):
