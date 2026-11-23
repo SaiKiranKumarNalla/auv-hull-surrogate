@@ -20,3 +20,16 @@
 ## What we add (see 03)
 Flow conditions beyond their single case; more architectures (GP with uncertainty, gradient boosting, physics-based
 features, field prediction); condition-aware design.
+
+## The DNN: paper text vs their code (checked 2026-11-23)
+| Item | Paper (Sec. 5) | Code (`student_model.py`, `nn_train.py`, `utils.py`) | Our M1 versions |
+|---|---|---|---|
+| Layers | 9, ReLU, skip at an inner hidden layer | 6→128→64→64→32→32→64→64→8→1; skip `h + relu(h)` after layer 3 | same |
+| Parameters | 22,249 | 23,249 (counted) | 23,249; the paper's figure is probably a typo |
+| Dropout | 0.2, two layers | `nn.Dropout(p=0.2)` created but never applied | M1a: none · M1b: 0.2 |
+| Input scaling | min–max | min–max on fixed design ranges | min–max on the training data |
+| Init | Xavier-normal, zero bias | same | same (M1a/M1b) |
+| Optimiser, loss | Adam, lr **0.0003**, L1 | Adam, lr **0.001**, L1, batch 32, 400 epochs | M1a: 1e-3 · M1b: 3e-4 |
+| Checkpoint | "early stopping" on a 90/10 split | keeps the epoch with the smallest train–val loss gap (after epoch 25) | M1a: gap · M1b: lowest val loss |
+| Restarts | not mentioned | up to 5 warm-started retrains, kept if **test** failures (>5 % error) drop; grows data 100→2,400 | not copied (test leakage) |
+| Reported result | MAPE **1.85 %** on 621 test hulls; 14 outliers | | |
