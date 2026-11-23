@@ -22,7 +22,7 @@ import manifold3d as m3d
 import hull_families as hf
 
 FAMILIES = {'myring': hf.myring, 'naca_body': hf.naca_body, 'haack': hf.haack, 'elliptic': hf.elliptic,
-            'flat_stern': hf.flat_stern, 'fish_like': hf.fish_like}
+            'flat_stern': hf.flat_stern, 'fish_like': hf.fish_like, 'suboff_approx': hf.suboff_approx}
 
 
 # ---------- mesh helpers ----------
@@ -68,15 +68,14 @@ def hull_manifold(spec, n_phi=96):
     x, r = hull_profile(spec)
     r = r.copy()
     r[r < 1e-6] = 1e-6                                   # pointed ends -> tiny loops, then fan caps
-    X, Y, Z = hf.surface(x, r, n_phi, spec.get('width', 1.0), spec.get('height', 1.0))
+    X, Y, Z = hf.surface(x, r, n_phi, spec.get('width', 1.0), spec.get('height', 1.0), spec.get('p', 2.0))
     return to_manifold(*grid_mesh(np.stack([X, Y, Z], -1)))
 
 
 def hull_radius(spec, x0, roll):
     """Distance from the axis to the hull surface at station x0 in direction `roll` (elliptic sections allowed)."""
     x, r = hull_profile(spec)
-    w, h = spec.get('width', 1.0), spec.get('height', 1.0)
-    return np.interp(x0, x, r) / np.sqrt((np.cos(roll) / w) ** 2 + (np.sin(roll) / h) ** 2)
+    return np.interp(x0, x, r) * hf.section_scale(roll, spec.get('width', 1.0), spec.get('height', 1.0), spec.get('p', 2.0))
 
 
 # ---------- fins ----------

@@ -73,11 +73,17 @@ def fish_like(L, t, x_max=0.35, tail=0.04, num=300):
 
 
 # ---------- STL export ----------
-def surface(x, r, n_phi=72, width=1.0, height=1.0):
-    """Revolve r(x) about the x axis. width/height != 1 gives an elliptic cross-section (fish-like bodies)."""
+def section_scale(phi, width=1.0, height=1.0, p=2.0):
+    """Radius of a superellipse |y/w|^p + |z/h|^p = 1 in direction phi (p = 2 ellipse, p > 2 boxy, e.g. boxfish)."""
+    return 1.0 / (np.abs(np.cos(phi) / width) ** p + np.abs(np.sin(phi) / height) ** p) ** (1.0 / p)
+
+
+def surface(x, r, n_phi=72, width=1.0, height=1.0, p=2.0):
+    """Sweep r(x) along the x axis with a superellipse cross-section (width = height = 1, p = 2: body of revolution)."""
     phi = np.linspace(0, 2 * np.pi, n_phi, endpoint=False)
-    Y = np.outer(r, np.cos(phi)) * width
-    Z = np.outer(r, np.sin(phi)) * height
+    rho = section_scale(phi, width, height, p)
+    Y = np.outer(r, np.cos(phi) * rho)
+    Z = np.outer(r, np.sin(phi) * rho)
     X = np.repeat(x[:, None], n_phi, axis=1)
     return X, Y, Z
 
@@ -124,3 +130,22 @@ def resample(x, r, num=160):
 def volume_area(x, r):
     S = 2 * np.pi * np.trapezoid(r * np.sqrt(1 + np.gradient(r, x) ** 2), x)
     return np.pi * np.trapezoid(r**2, x), S
+
+
+def suboff_approx(L=4.356, d=0.508, x_fore=1.016, x_aft=3.245, x_cap=4.261, num=300):
+    """APPROXIMATE DARPA SUBOFF bare hull: cited section breakpoints, placeholder curves.
+    Breakpoints (bow end 1.016 m, parallel body to 3.245 m, afterbody to 4.261 m, cap to 4.356 m; D = 0.508 m) from
+    Groves, Huang & Chang 1989 (DTRC/SHD-1298-01) as transcribed by secondary sources. The bow/stern curves here are
+    an elliptic bow and a cubic stern taper, NOT the report's polynomials: replace with the exact equations
+    (report Table/Eqs.) before any validation run."""
+    R = d / 2
+    xb = np.linspace(0, x_fore, num)
+    rb = R * np.sqrt(np.clip(1 - ((x_fore - xb) / x_fore) ** 2, 0, None)) ** 0.75
+    xm = np.linspace(x_fore, x_aft, num)[1:]
+    xa = np.linspace(x_aft, x_cap, num)[1:]
+    s = (xa - x_aft) / (x_cap - x_aft)
+    r_cap0 = 0.1 * R
+    ra = r_cap0 + (R - r_cap0) * (1 - 3 * s**2 + 2 * s**3)
+    xc = np.linspace(x_cap, L, num // 3)[1:]
+    rc = r_cap0 * np.sqrt(np.clip(1 - ((xc - x_cap) / (L - x_cap)) ** 2, 0, None))
+    return np.concatenate([xb, xm, xa, xc]), np.concatenate([rb, np.full_like(xm, R), ra, rc])
