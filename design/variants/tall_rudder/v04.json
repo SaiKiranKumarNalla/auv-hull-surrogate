@@ -7,8 +7,8 @@
    "b": 0.6746036982441603,
    "c": 0.5580437320337779,
    "d": 0.20009915297036965,
-   "n": 2.110206098827654,
-   "theta_deg": 27.275819194029733
+   "n": 1.7440824395310615,
+   "theta_deg": 25.729039539445562
   }
  },
  "fins": [
@@ -26,7 +26,7 @@
    "thickness": 0.12,
    "deflection_deg": 0.0,
    "flap_fraction": 0.4,
-   "flap_deg": 16.380634749805186,
+   "flap_deg": 17.76126949961037,
    "provenance": {
     "source": "knowledge03",
     "status": "assumption",
@@ -45,7 +45,7 @@
    "span": 0.07883696766825937,
    "sweep_deg": 18.520399457778815,
    "thickness": 0.12,
-   "deflection_deg": -5.460211583268395,
+   "deflection_deg": -5.92042316653679,
    "flap_fraction": 0.0,
    "flap_deg": 0.0,
    "provenance": {
@@ -66,13 +66,13 @@
   "features": {
    "length_scale": 1.0315041257555968,
    "diam_scale": 1.047639544347485,
-   "myring_n": 2.110206098827654,
-   "myring_theta": 27.275819194029733,
+   "myring_n": 0.8720412197655307,
+   "myring_theta": 0.7290395394455622,
    "fin_span": 0.9406499603516114,
    "fin_chord": 0.9980116672604893,
    "fin_sweep": 3.520399457778815,
    "fin_x": -0.012618471883279532,
-   "ctrl_angle": 1.092042316653679
+   "ctrl_angle": 1.184084633307358
   },
   "redraws": 0,
   "split": "train"

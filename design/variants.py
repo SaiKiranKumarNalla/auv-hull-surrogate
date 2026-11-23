@@ -28,11 +28,11 @@ HERE = os.path.dirname(__file__)
 HULL_FEATURES = {
     'length_scale':  (0.85, 1.15, 'mul', 'body length (nose, mid-body and tail lengths together)'),
     'diam_scale':    (0.85, 1.15, 'mul', 'maximum diameter'),
-    'myring_n':      (1.5, 4.0, 'abs', 'Myring nose fullness n'),
-    'myring_theta':  (12.0, 40.0, 'abs', 'Myring tail half-angle (deg)'),
-    'haack_C':       (0.0, 1 / 3, 'abs', 'Haack shape constant C'),
-    'tail_power':    (1.5, 3.0, 'abs', 'parabolic tail exponent'),
-    'stern_ratio':   (0.3, 0.6, 'abs', 'flat-stern base radius / max radius'),
+    'myring_n':      (0.75, 1.25, 'mul', 'Myring nose fullness n (relative to the base)'),
+    'myring_theta':  (-8.0, 8.0, 'add', 'Myring tail half-angle (deg, around the base)'),
+    'haack_C':       (-0.05, 0.05, 'add', 'Haack shape constant C (around the base, so Von Kármán and LV-Haack stay apart)'),
+    'tail_power':    (-0.4, 0.4, 'add', 'parabolic tail exponent (around the base)'),
+    'stern_ratio':   (-0.1, 0.1, 'add', 'flat-stern base radius / max radius (around the base)'),
     'fish_x_max':    (-0.04, 0.04, 'add', 'position of maximum thickness (fraction of L)'),
     'fish_width':    (0.9, 1.1, 'mul', 'body width / height'),
     'bill_scale':    (0.75, 1.25, 'mul', 'bill length'),
@@ -42,7 +42,7 @@ FIN_FEATURES = {
     'fin_chord':     (0.85, 1.15, 'mul', 'root and tip chord of every fin'),
     'fin_sweep':     (-10.0, 10.0, 'add', 'leading-edge sweep (deg)'),
     'fin_x':         (-0.03, 0.03, 'add', 'fin position along the body (fraction of L)'),
-    'ctrl_angle':    (0.5, 1.25, 'mul', 'deflection and flap angles of control surfaces'),
+    'ctrl_angle':    (0.0, 1.5, 'mul', 'deflection and flap angles of control surfaces (0 = undeflected)'),
 }
 
 
@@ -97,11 +97,11 @@ def apply(base, values):
         L, D = p.get('L', 4.356), p.get('d', 0.508)
         p.update(L=L * ls, d=D * ds, x_fore=p.get('x_fore', 1.016) * ls, x_aft=p.get('x_aft', 3.245) * ls,
                  x_cap=p.get('x_cap', 4.261) * ls)
-    if 'myring_n' in values: p['n'] = values['myring_n']
-    if 'myring_theta' in values: p['theta_deg'] = values['myring_theta']
-    if 'haack_C' in values: p['C'] = values['haack_C']
-    if 'tail_power' in values: p['tail_power'] = values['tail_power']
-    if 'stern_ratio' in values: p['stern_ratio'] = values['stern_ratio']
+    if 'myring_n' in values: p['n'] = float(np.clip(p['n'] * values['myring_n'], 1.0, 8.0))
+    if 'myring_theta' in values: p['theta_deg'] = float(np.clip(p['theta_deg'] + values['myring_theta'], 5, 50))
+    if 'haack_C' in values: p['C'] = float(np.clip(p['C'] + values['haack_C'], 0.0, 0.45))
+    if 'tail_power' in values: p['tail_power'] = float(np.clip(p['tail_power'] + values['tail_power'], 1.2, 4.0))
+    if 'stern_ratio' in values: p['stern_ratio'] = float(np.clip(p['stern_ratio'] + values['stern_ratio'], 0.2, 0.7))
     if 'fish_x_max' in values: p['x_max'] = float(np.clip(p['x_max'] + values['fish_x_max'], 0.25, 0.5))
     if 'fish_width' in values: h['width'] = h.get('width', 1.0) * values['fish_width']
     if h.get('bill'):

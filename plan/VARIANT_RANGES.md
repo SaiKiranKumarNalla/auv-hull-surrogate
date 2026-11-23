@@ -13,11 +13,11 @@ Gate result: **200/200 variants pass**.
 |---|---|---|
 | `length_scale` | ×0.85–1.15 | body length (nose, mid-body and tail lengths together) |
 | `diam_scale` | ×0.85–1.15 | maximum diameter |
-| `myring_n` | 1.5–4 | Myring nose fullness n |
-| `myring_theta` | 12–40 | Myring tail half-angle (deg) |
-| `haack_C` | 0–0.333 | Haack shape constant C |
-| `tail_power` | 1.5–3 | parabolic tail exponent |
-| `stern_ratio` | 0.3–0.6 | flat-stern base radius / max radius |
+| `myring_n` | ×0.75–1.25 | Myring nose fullness n (relative to the base) |
+| `myring_theta` | -8 to +8 | Myring tail half-angle (deg, around the base) |
+| `haack_C` | -0.05 to +0.05 | Haack shape constant C (around the base, so Von Kármán and LV-Haack stay apart) |
+| `tail_power` | -0.4 to +0.4 | parabolic tail exponent (around the base) |
+| `stern_ratio` | -0.1 to +0.1 | flat-stern base radius / max radius (around the base) |
 | `fish_x_max` | -0.04 to +0.04 | position of maximum thickness (fraction of L) |
 | `fish_width` | ×0.9–1.1 | body width / height |
 | `bill_scale` | ×0.75–1.25 | bill length |
@@ -25,7 +25,7 @@ Gate result: **200/200 variants pass**.
 | `fin_chord` | ×0.85–1.15 | root and tip chord of every fin |
 | `fin_sweep` | -10 to +10 | leading-edge sweep (deg) |
 | `fin_x` | -0.03 to +0.03 | fin position along the body (fraction of L) |
-| `ctrl_angle` | ×0.5–1.25 | deflection and flap angles of control surfaces |
+| `ctrl_angle` | ×0–1.5 | deflection and flap angles of control surfaces (0 = undeflected) |
 
 ## Features per base
 
