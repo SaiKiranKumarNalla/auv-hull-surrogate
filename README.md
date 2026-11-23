@@ -99,7 +99,7 @@ Full write-up: [docs/REPLICATION.md](docs/REPLICATION.md)
 - Fixed before training; the test set is used once.
 - Reported per model: accuracy, data needed (scaling curve), training cost, inference time, physical consistency.
 
-Plan: [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md)
+Plan: [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md) · Literature: [docs/REFERENCES.md](docs/REFERENCES.md)
 
 ---
 
@@ -111,7 +111,7 @@ Plan: [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md)
 | [`cfd/`](cfd/) | OpenFOAM case generator, post-processing, GCP run scripts |
 | [`models/`](models/), [`notebooks/`](notebooks/) | Surrogate models and the Pilot A benchmark |
 | [`results/`](results/) | Grid study, custom CFD cases, benchmark tables |
-| [`plan/`](plan/), [`docs/`](docs/) | Study plan, harness design, replication write-up |
+| [`plan/`](plan/), [`docs/`](docs/) | Study plan, harness design, replication write-up, [key references](docs/REFERENCES.md) |
 
 ## Reproduce
 
