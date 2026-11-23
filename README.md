@@ -28,7 +28,7 @@ that costs money.
 
 ```mermaid
 flowchart LR
-    S["Sampler<br/>20 bases × 10 variants<br/>× 13 flow conditions"] --> G{"Geometry<br/>gate"}
+    S["Sampler<br/>20 bases × 10 variants<br/>× 15 flow conditions"] --> G{"Geometry<br/>gate"}
     G -->|pass| M["Mesh<br/>snappyHexMesh"]
     M --> MG{"Mesh<br/>gate"}
     MG -->|pass| C["CFD<br/>OpenFOAM k-ω SST"]
@@ -76,7 +76,7 @@ flowchart LR
 | Study | Data | Architectures | Question | Status |
 |---|---|---|---|---|
 | **Pilot A: paper replication** | 3,021 published Myring-hull CFD runs | Paper NN, MLP, GP, boosted trees, physics hybrid, ensemble | Does the published result hold, and does physics help? | **Done** |
-| **Study 1: corpus surrogate** | 2,600 runs: 200 shapes × 13 flow conditions | MLP on forces and moments | Can a network replace CFD for forces on unseen shapes? | Pilot next |
+| **Study 1: corpus surrogate** | 3,000 runs: 200 shapes × 15 flow conditions (pilot: 15 runs done) | MLP on forces and moments | Can a network replace CFD for forces on unseen shapes? | Pilot done |
 | **Study 1b: PINN ladder** | Physics only, then physics + sparse CFD | PINN, parameterised PINN, hybrid PINN | Where do data-free PINNs stop working? | Planned |
 | **Study 2: field models** | Same corpus, full 3D fields | MeshGraphNet, FNO, Transolver | Can a network predict the whole flow field? | Planned |
 

@@ -6,7 +6,7 @@ survive the funnel. Fixed on 2026-11-23, before any corpus run.
 
 ```mermaid
 flowchart LR
-    A["Study 0<br/>Validated CFD recipe<br/>(done)"] --> B["Study 1<br/>2,600-run corpus<br/>+ NN surrogate"]
+    A["Study 0<br/>Validated CFD recipe<br/>(done)"] --> B["Study 1<br/>3,000-run corpus<br/>+ NN surrogate"]
     B --> C["Study 1b<br/>PINN ladder<br/>vs CFD vs surrogate"]
     B --> D["Study 2<br/>Field models<br/>GNN · FNO · Transolver"]
     C --> E["Funnel<br/>best designs"]
@@ -31,20 +31,36 @@ flowchart LR
 ```mermaid
 flowchart TB
     B["20 core designs<br/>(design/registry.py)"] --> V["× 10 parametric variants each<br/>= 200 distinct shapes"]
-    V --> C["× 13 flow conditions each<br/>speed 0.5–5 m/s · angle 0–10°<br/>fresh / salt water"]
-    C --> R["= 2,600 CFD runs<br/>1 run = 1 training sample"]
+    V --> C["× 15 flow conditions each<br/>Re 10⁶–10⁷ · yaw 0–30° · pitch −10–20°"]
+    C --> R["= 3,000 CFD runs<br/>1 run = 1 training sample"]
     R --> O["Saved per run:<br/>6 forces + moments · surface p, τ_w<br/>3D fields on point cloud + 128×64×64 grid"]
 ```
 
 | Decision | Choice | Why |
 |---|---|---|
-| Shapes vs conditions | 10 variants × 13 conditions | One mesh per shape is reused for 13 conditions; every shape gets full drag and force curves, which the later motion model needs |
+| Shapes vs conditions | 10 variants × 15 conditions | Every shape gets drag and side-force curves vs speed and angle, which the later motion model needs |
 | Density and velocity | Varied through the Reynolds number | In incompressible flow they only enter through Re and dynamic pressure; varying both separately repeats runs |
 | Condition sampling | Latin hypercube per shape, plus a 0° cruise anchor | No shape/condition correlation, so no coverage bias |
 | Mesh | One recipe for every run (~700K, 600-iteration cap) | Mixing fidelities would hide mesh error inside the design effect |
 | Mesh-error check | ~50 runs repeated at ~1.2M cells | Reported as uncertainty, never used for training |
 | Waves | Not in this corpus | Needs a free-surface solver (10–50× cost); later, as a depth parameter |
 | Geometry | Every shape passes the quality gate (`design/quality.py`) | No bad junctions or needle tips reach the mesher |
+
+The 15 flow conditions (dimensionless: body length 1, U = 1, Re = 1/ν; the body is rotated, flow is always +x):
+
+| # | Yaw | Pitch | Re | Purpose |
+|---|---|---|---|---|
+| 1–3 | 0° | 0° | 10⁶, 3×10⁶, 10⁷ | straight ahead: drag vs speed |
+| 4–6 | 10° | 0° | 10⁶, 3×10⁶, 10⁷ | turning |
+| 7–9 | 20° | 0° | 10⁶, 3×10⁶, 10⁷ | hard turn |
+| 10 | 0° | 10° | 3×10⁶ | climbing |
+| 11 | 0° | 20° | 3×10⁶ | steep climb |
+| 12 | 0° | −10° | 3×10⁶ | diving (asymmetric bodies differ from climbing) |
+| 13 | 10° | 10° | 3×10⁶ | combined turn and climb |
+| 14 | 5° | 0° | 3×10⁶ | small-angle (linear) manoeuvring range |
+| 15 | 30° | 0° | 3×10⁶ | edge of the steady range (flagged if it does not settle) |
+
+Broadside flow (90° side or top) is excluded: it sheds vortices and steady RANS cannot settle (pilot, 23 Nov).
 
 Variant ranges per base, gallery and split assignment: [VARIANT_RANGES.md](VARIANT_RANGES.md)
 (200/200 variants pass the geometry gate; 136 train, 34 unseen-variant, 30 unseen-base).
@@ -57,7 +73,7 @@ Test splits, fixed before training:
 | Unseen base | 3 of the 20 bases entirely | New kind of vehicle |
 | Unseen condition | Top of the speed range, angles above 9° | Extrapolation |
 
-Budget: ~125 VM-hours on c2d-highcpu-32 (≈ €160 on demand, €55–70 on spot with a resumable runner).
+Budget (from the pilot, 4–8 VM-minutes per run): ~150–200 VM-hours (≈ €200–260 on demand, €70–90 on spot). Storage ≈ 300–350 GB at the measured 70–130 MB per run.
 A 40-shape pilot runs first to measure failure rate, runtime and convergence.
 
 ## Study 1b: PINN ladder
