@@ -3,16 +3,16 @@
 Ten core references for this project, grouped by what each one supports. [Back to the project page](../README.md)
 
 Status column: **read** = read in full or in large part for this project; **abstract** = read from the abstract and
-summaries only, full text still to read. Where the author list is not given, take it from the arXiv page.
+summaries only, full text still to read; **standard** = widely cited method reference, details from memory, to verify. Where the author list is not given, take it from the arXiv page.
 
 ## Foundations
 
 | # | Reference | Supports | Status |
 |---|---|---|---|
 | 1 | Vardhan, H. et al. (2023). *Sample-Efficient and Surrogate-Based Design Optimization of Underwater Vehicle Hulls.* [arXiv:2304.12420](https://arxiv.org/abs/2304.12420) | Pilot A: the Myring-hull CFD setup and dataset we replicate | read |
-| 2 | Celik, I. B., Ghia, U., Roache, P. J., Freitas, C. J., Coleman, H., Raad, P. E. (2008). *Procedure for Estimation and Reporting of Uncertainty Due to Discretization in CFD Applications.* J. Fluids Eng. 130(7): 078001. [doi:10.1115/1.2960953](https://doi.org/10.1115/1.2960953) | Grid convergence index (GCI) used in our mesh study | read |
+| 2 | Celik, I. B., Ghia, U., Roache, P. J., Freitas, C. J., Coleman, H., Raad, P. E. (2008). *Procedure for Estimation and Reporting of Uncertainty Due to Discretization in CFD Applications.* J. Fluids Eng. 130(7): 078001. [doi:10.1115/1.2960953](https://doi.org/10.1115/1.2960953) | Grid convergence index (GCI) used in our mesh study | standard |
 | 3 | Li, Y., Zhang, D.-y., Bao, C.-m., Liu, Q., Hu, J.-m., Liu, Z.-w. (2026). *High-fidelity surrogate-based multidisciplinary multi-objective sequential optimization for AUV design.* Applied Ocean Research 175: 105219. [doi:10.1016/j.apor.2026.105219](https://doi.org/10.1016/j.apor.2026.105219) | Closest marine pipeline: parametric AUV hull → CFD → surrogate with adaptive sampling | read |
-| 4 | Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., Yang, L. (2021). *Physics-informed machine learning.* Nature Reviews Physics 3: 422–440. [doi:10.1038/s42254-021-00314-5](https://doi.org/10.1038/s42254-021-00314-5) | Framing of the architecture study: PINNs, neural operators, hybrids | read |
+| 4 | Karniadakis, G. E., Kevrekidis, I. G., Lu, L., Perdikaris, P., Wang, S., Yang, L. (2021). *Physics-informed machine learning.* Nature Reviews Physics 3: 422–440. [doi:10.1038/s42254-021-00314-5](https://doi.org/10.1038/s42254-021-00314-5) | Framing of the architecture study: PINNs, neural operators, hybrids | standard |
 | 5 | *CarBench: A Comprehensive Benchmark for Neural Surrogates on High-Fidelity 3D Car Aerodynamics* (2025). [arXiv:2512.07847](https://arxiv.org/abs/2512.07847) | Closest benchmark design to Study 2: 3D RANS, many shape families, cross-family generalisation | abstract |
 
 ## Recent work (2025–2026)
