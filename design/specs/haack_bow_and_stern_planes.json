@@ -1,0 +1,48 @@
+{
+ "hull": {
+  "family": "haack",
+  "params": {
+   "a": 0.3,
+   "b": 0.65,
+   "c": 0.38,
+   "d": 0.191,
+   "C": 0.3333333333333333
+  }
+ },
+ "fins": [
+  {
+   "name": "bow_planes",
+   "rolls_deg": [
+    0,
+    180
+   ],
+   "x_le": 0.32,
+   "root_chord": 0.07,
+   "tip_chord": 0.05,
+   "span": 0.07,
+   "sweep_deg": 5,
+   "thickness": 0.12,
+   "deflection_deg": 10,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  },
+  {
+   "name": "stern",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.1,
+   "root_chord": 0.1,
+   "tip_chord": 0.06,
+   "span": 0.09,
+   "sweep_deg": 30,
+   "thickness": 0.12,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.19,
+   "b": 0.85,
+   "c": 0.29,
+   "d": 0.191,
+   "n": 2.0,
+   "theta_deg": 20
+  }
+ },
+ "fins": [
+  {
+   "name": "rudder",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 1.08,
+   "root_chord": 0.14,
+   "tip_chord": 0.1,
+   "span": 0.22,
+   "sweep_deg": 10,
+   "thickness": 0.12,
+   "deflection_deg": 0,
+   "flap_fraction": 0.4,
+   "flap_deg": 15
+  },
+  {
+   "name": "elevators",
+   "rolls_deg": [
+    0,
+    180
+   ],
+   "x_le": 1.14,
+   "root_chord": 0.09,
+   "tip_chord": 0.06,
+   "span": 0.08,
+   "sweep_deg": 15,
+   "thickness": 0.12,
+   "deflection_deg": -5,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  }
+ ]
+}

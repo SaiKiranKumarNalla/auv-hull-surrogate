@@ -1,0 +1,77 @@
+{
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 1.33,
+   "t": 0.14360902255639096,
+   "x_max": 0.35,
+   "tail": 0.012
+  },
+  "width": 0.65,
+  "height": 1.0
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.4,
+   "root_chord": 0.3,
+   "tip_chord": 0.05,
+   "span": 0.1,
+   "sweep_deg": 50,
+   "thickness": 0.08,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.3,
+   "root_chord": 0.12,
+   "tip_chord": 0.05,
+   "span": 0.12,
+   "sweep_deg": 35,
+   "thickness": 0.08,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  },
+  {
+   "name": "anal",
+   "rolls_deg": [
+    270
+   ],
+   "x_le": 0.85,
+   "root_chord": 0.12,
+   "tip_chord": 0.04,
+   "span": 0.05,
+   "sweep_deg": 45,
+   "thickness": 0.08,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 1.2,
+   "root_chord": 0.13,
+   "tip_chord": 0.035,
+   "span": 0.2,
+   "sweep_deg": 55,
+   "thickness": 0.08,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  }
+ ]
+}

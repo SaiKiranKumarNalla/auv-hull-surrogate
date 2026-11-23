@@ -1,0 +1,33 @@
+{
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.19,
+   "b": 0.85,
+   "c": 0.29,
+   "d": 0.191,
+   "n": 2.0,
+   "theta_deg": 20
+  }
+ },
+ "fins": [
+  {
+   "name": "tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.12,
+   "root_chord": 0.1,
+   "tip_chord": 0.07,
+   "span": 0.09,
+   "sweep_deg": 15,
+   "thickness": 0.12,
+   "deflection_deg": 0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0
+  }
+ ]
+}
