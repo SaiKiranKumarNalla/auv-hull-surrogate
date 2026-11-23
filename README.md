@@ -1,103 +1,129 @@
-# AUV hull drag surrogates: a replication and physics-informed benchmark
+# AUV Physics-AI Lab
 
-A replication of **Vardhan et al. 2023**, *Sample-Efficient and Surrogate-Based Design Optimization of Underwater
-Vehicle Hulls* ([arXiv 2304.12420](https://arxiv.org/abs/2304.12420)), turned into a fair scientific-ML benchmark
-on the same 3,021 OpenFOAM simulations of Myring hulls.
+**An agentic CFD harness for underwater-vehicle design, and a fair benchmark of physics-AI architectures
+(NN, PINN, FNO, graph networks) on the data it produces.**
 
-**Phase 1 (done):** models on the existing data, no new CFD.
-**Phase 2 (in progress):** own validated OpenFOAM pipeline (GCI 0.86 %), geometry quality gate, then a 2,600-run
-corpus for a PINN / FNO / graph-network benchmark. See [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md) and
-[plan/HARNESS.md](plan/HARNESS.md).
-Phase 3: dynamics (Fossen 6-DOF) simulator for the best designs.
+![Core designs](docs/img/hero.png)
 
-![Phase 1 summary](results/phase1_summary.png)
+<p align="center"><i>8 of the 20 core designs: real vehicles (blue), hull families (green), control-surface layouts
+(purple) and bio-inspired shapes (orange). Each one is a JSON recipe turned into a watertight solid.</i></p>
 
-## Key findings
-1. **The paper's result is reproduced.** Their network, trained as their code runs it, reaches **1.86 %** MAPE
-   on its best seed (paper: **1.85 %**). The typical result is **2.68 ± 0.49 %** over 5 seeds.
-2. **The paper's number is optimistic.** Their script retrains and keeps runs based on **test-set** error.
-   The paper's text and code also differ:
-   - **Learning rate:** 3e-4 in the text, 1e-3 in the code.
-   - **Dropout:** the text says 0.2; the code creates the layers but never applies them.
-   - **Weights:** 22,249 in the text, 23,249 in the code.
-
-   Built as the text describes, the network gets **8.4 %**. Details: [knowledge/01-paper.md](knowledge/01-paper.md).
-3. **Physics helps more than architecture.** With the same small MLP and the same tuning budget (3-fold CV random
-   search), predicting a *correction to a friction-line formula* instead of raw drag cuts error from **3.2 % to
-   1.7–1.8 %**. Dimensionless inputs add a little on top.
-4. **Best models:**
-
-   | Model | Overall error | Fat-hull error |
-   |---|---|---|
-   | M6, a 5-member ensemble of the hybrid | **1.59 %** | 11.8 % |
-   | M4, the hybrid with a monotonicity penalty | **1.69 ± 0.23 %** | 13.0 % |
-
-   Both beat the paper's network and a Gaussian process (2.06 %).
-5. **Physical consistency.** On 1,000 random hulls we checked how often predicted drag *drops* when the body gets
-   5 % longer, which should never happen:
-
-   | Model | Violations |
-   |---|---|
-   | Gaussian process | 16.5 % |
-   | Boosted trees | 11.1 % |
-   | MLP | 9.4 % |
-   | M4 with the penalty | 4.1 % |
-
-   Accuracy alone hides this, and it matters for design optimisation.
-6. **Data efficiency.** The hybrid reaches **2.1 % with 100 training hulls**; the raw MLP needs about 2,000 for 3.2 %.
-   Learning curves are noisy at mid-range N (single seed).
-7. **Unsolved: fat hulls (L/d < 7).** Every model makes 11–19 % error on them, because they are dominated by flow
-   separation and pressure drag. With all fat hulls removed from training:
-
-   | Model | Fat-hull error |
-   |---|---|
-   | Gaussian process | 47.7 % |
-   | M4 hybrid | 15.1 % |
-   | Physics formula alone | 18.5 % |
-
-   This is the motivation for Phase 2 CFD.
-8. **Uncertainty.** The ensemble's ±2σ band covers only 78 % of test hulls (ideal 95 %), so it is under-dispersed.
-
-## Models
-| ID | Model |
+| | |
 |---|---|
-| M0 | Friction-line physics: ITTC-1957 × Hoerner form factor, on wetted area |
-| M1 / M1a / M1b | Paper network: our first copy / code as run / text as written |
-| M2 | Histogram gradient boosting |
-| M3 | Gaussian process (Matérn 2.5, log drag) |
-| M5 | Small modern MLP (SiLU), untuned |
-| MLP ablation | 2 × 2: raw or dimensionless inputs × drag or correction target, all tuned with the same budget |
-| M4 | Hybrid: dimensionless inputs, correction target, monotonicity penalty on unlabelled collocation hulls |
-| M6 | Deep ensemble of 5 M4 models |
+| **The question** | How well can modern physics-AI models replace CFD for vehicle design, and which architecture wins where? |
+| **Part 1: the harness** | An automated, agent-operated pipeline: design recipe → geometry check → mesh → OpenFOAM → checked result |
+| **Part 2: the benchmark** | One validated corpus, many architectures, the same test splits, honest failure analysis |
+| **Status** | Harness core built and validated · paper replication done · corpus pilot next |
 
-**Protocol for all models:**
-- The paper's split: 2,400 training hulls and 621 test hulls.
-- 10 % of the training set held out for validation.
-- 5 seeds per model.
-- The test set is used once and never for selection.
-- Errors are reported overall and per fineness group.
+---
 
-Raw results: [results/benchmark.csv](results/benchmark.csv).
+## 1 · The harness: from design recipe to verified CFD sample
 
-## Repository
-- `notebooks/01_data_exploration.ipynb`: design space, hull gallery, physics view, where models fail, a sample CFD
-  case, data quality.
-- `notebooks/02_model_benchmark.ipynb`: M0–M5 and the replication check against the paper.
-- `notebooks/03_physics_ml.ipynb`: tuning, ablation, M4, M6, consistency audit, learning curves, out-of-distribution
-  test.
-- `models/`: `physics.py` (Myring geometry, M0), `harness.py` (split, metrics, results log), `nets.py` (the paper
-  network and an MLP), `physics_ml.py` (features, hybrid, penalty, audit).
-- `scripts/run_m1_variants.py`: the two faithful paper-network versions.
-- `knowledge/`, `plan/`: notes on the paper, dataset and flow conditions, and the project plan.
+![Pipeline](docs/img/pipeline.png)
+
+Every sample goes through the same automated stages. Each stage has a **gate**: a sample that fails is logged and
+rejected, never silently kept. AI coding agents (Claude Code, Codex) operate the harness through
+[`AGENTS.md`](AGENTS.md): they launch runs, read the gate reports and triage failures. A human approves anything
+that costs money.
+
+```mermaid
+flowchart LR
+    S["Sampler<br/>20 bases × 10 variants<br/>× 13 flow conditions"] --> G{"Geometry<br/>gate"}
+    G -->|pass| M["Mesh<br/>snappyHexMesh"]
+    M --> MG{"Mesh<br/>gate"}
+    MG -->|pass| C["CFD<br/>OpenFOAM k-ω SST"]
+    C --> RG{"Result<br/>gate"}
+    RG -->|pass| DB[("Corpus<br/>forces + 3D fields")]
+    G -->|fail| R["Rejected<br/>with reason"]
+    MG -->|fail| R
+    RG -->|fail| R
+    A(["AI agent<br/>runs · reads gates · triages"]) -.-> S
+    A -.-> R
+    style G fill:#EEEDFE,stroke:#534AB7
+    style MG fill:#EEEDFE,stroke:#534AB7
+    style RG fill:#EEEDFE,stroke:#534AB7
+    style R fill:#FCEBEB,stroke:#A32D2D
+    style A fill:#E1F5EE,stroke:#0F6E56
+```
+
+| Stage | What it guarantees | Evidence |
+|---|---|---|
+| **Geometry gate** | One watertight solid; no needle fin tips, no collars where parts merge | 20/20 core designs and 200/200 variants pass. [Before/after](plan/HARNESS.md) |
+| **Mesh** | Same validated recipe for every run (~700K cells, prism layers at y⁺ ≈ 30) | Grid convergence: observed order 1.94, **GCI 0.86 %** |
+| **Local accuracy** | Velocity near fins and in the wake, not only drag | All probe lines within **5 %** of the finest grid |
+| **CFD** | Repeatable meshes, a convergence-based stop rule | Repeat run gives identical drag |
+
+![Flow fields](docs/img/flow.png)
+
+Details: [harness design](plan/HARNESS.md) · [variant ranges and gallery](plan/VARIANT_RANGES.md) ·
+[grid study](results/cfd_gridstudy/)
+
+---
+
+## 2 · The benchmark: which architecture, for what?
+
+```mermaid
+flowchart LR
+    P["Pilot A ✓<br/>Paper replication<br/>3,021 Myring hulls"] --> S1["Study 1<br/>Our corpus<br/>NN surrogate"]
+    S1 --> S1b["Study 1b<br/>PINN ladder<br/>laminar → turbulent"]
+    S1 --> S2["Study 2<br/>Field models<br/>GNN · FNO · Transolver"]
+    S1b --> F["Best designs →<br/>6-DOF motion<br/>simulator"]
+    S2 --> F
+    style P fill:#E1F5EE,stroke:#0F6E56
+    style F fill:#F1EFE8,stroke:#888780,stroke-dasharray: 4 3
+```
+
+| Study | Data | Architectures | Question | Status |
+|---|---|---|---|---|
+| **Pilot A: paper replication** | 3,021 published Myring-hull CFD runs | Paper NN, MLP, GP, boosted trees, physics hybrid, ensemble | Does the published result hold, and does physics help? | **Done** |
+| **Study 1: corpus surrogate** | 2,600 runs: 200 shapes × 13 flow conditions | MLP on forces and moments | Can a network replace CFD for forces on unseen shapes? | Pilot next |
+| **Study 1b: PINN ladder** | Physics only, then physics + sparse CFD | PINN, parameterised PINN, hybrid PINN | Where do data-free PINNs stop working? | Planned |
+| **Study 2: field models** | Same corpus, full 3D fields | MeshGraphNet, FNO, Transolver | Can a network predict the whole flow field? | Planned |
+
+### Pilot A result: the paper replicated, then beaten with physics
+
+![Pilot A](results/phase1_summary.png)
+
+- **Replicated:** the paper's network gets **1.86 %** error on its best seed (paper: 1.85 %). Over 5 seeds it
+  averages 2.68 %, because the original script selects runs on the test set.
+- **Physics beats architecture:** predicting a correction to a friction-line formula, instead of raw drag, cuts
+  error to **1.6–1.7 %** and halves physically wrong predictions.
+- **The open problem:** fat hulls (length/diameter < 7) stay at 11–19 % error for every model, because flow
+  separation dominates. Our own CFD corpus is built to cover exactly that.
+
+Full write-up: [docs/REPLICATION.md](docs/REPLICATION.md)
+
+### Fair-comparison rules, for every study
+
+- Same splits: unseen variants of known designs, 3 unseen design families, and unseen flow conditions.
+- Fixed before training; the test set is used once.
+- Reported per model: accuracy, data needed (scaling curve), training cost, inference time, physical consistency.
+
+Plan: [plan/STUDY_PLAN.md](plan/STUDY_PLAN.md)
+
+---
+
+## Repository map
+
+| Folder | What |
+|---|---|
+| [`design/`](design/) | Parametric geometry, 20 core designs, variants, geometry gate |
+| [`cfd/`](cfd/) | OpenFOAM case generator, post-processing, GCP run scripts |
+| [`models/`](models/), [`notebooks/`](notebooks/) | Surrogate models and the Pilot A benchmark |
+| [`results/`](results/) | Grid study, custom CFD cases, benchmark tables |
+| [`plan/`](plan/), [`docs/`](docs/) | Study plan, harness design, replication write-up |
 
 ## Reproduce
+
 ```bash
-git clone https://github.com/vardhah/UUV-design-optimization reference/UUV-design-optimization   # data (GPL-3.0)
-python -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn torch matplotlib jupyterlab nbformat
-.venv/bin/jupyter lab notebooks/
+python -m venv .venv && .venv/bin/pip install numpy scipy scikit-learn torch matplotlib manifold3d jupyterlab
+.venv/bin/python design/quality.py          # geometry gate on the 20 core designs
+.venv/bin/python design/variants.py         # 200 gated variants
 ```
-CPU only. Notebook 03 takes about an hour on a laptop.
+CFD runs need OpenFOAM v2112 (we use a GCP VM, scripts in `cfd/gcp/`). Pilot A needs the paper's data:
+see [docs/REPLICATION.md](docs/REPLICATION.md).
 
 ## Data and licence
-The dataset and the reference code belong to Vardhan et al. (GPL-3.0). They are **not** included here; they are
-cloned into `reference/`, which is git-ignored. The code in this repository was written independently.
+
+The Pilot A dataset and reference code belong to Vardhan et al. (GPL-3.0); they are not included and are cloned into
+the git-ignored `reference/`. All code in this repository was written independently.
