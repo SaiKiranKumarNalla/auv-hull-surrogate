@@ -1,0 +1,30 @@
+FoamFile { version 2.0; format ascii; class dictionary; object local; }
+// Local mesh-independence samples for swordfish_like (hull 0..1 m, bill to -0.7 m, caudal TE ~1.40 m).
+functions
+{
+lines
+{
+    type sets; libs (sampling); setFormat raw; fields (p U); interpolationScheme cellPoint;
+    sets
+    {
+        blMid        { type uniform; axis distance; start (0.33 0 -0.1112); end (0.33 0 -0.25);  nPoints 200; }
+        blTail       { type uniform; axis distance; start (0.75 0 -0.0522); end (0.75 0 -0.20);  nPoints 200; }
+        dorsalWake   { type uniform; axis distance; start (0.40 0 0.10);    end (0.40 0 0.35);   nPoints 200; }
+        pectoralWake { type uniform; axis distance; start (0.40 0.05 -0.023); end (0.40 0.32 -0.149); nPoints 200; }
+        caudalWake   { type uniform; axis distance; start (1.42 0 -0.40);   end (1.42 0 0.40);   nPoints 300; }
+        wakeY        { type uniform; axis distance; start (2.44 -0.40 0);   end (2.44 0.40 0);   nPoints 300; }
+        wakeZ        { type uniform; axis distance; start (2.44 0 -0.40);   end (2.44 0 0.40);   nPoints 300; }
+    }
+}
+planes
+{
+    type surfaces; libs (sampling); surfaceFormat raw; fields (p U); interpolationScheme cellPoint;
+    surfaces
+    {
+        sideView     { type cuttingPlane; planeType pointAndNormal; pointAndNormalDict { point (0 0 0); normal (0 1 0); } interpolate true; }
+        topView      { type cuttingPlane; planeType pointAndNormal; pointAndNormalDict { point (0 0 0); normal (0 0 1); } interpolate true; }
+        crossFins    { type cuttingPlane; planeType pointAndNormal; pointAndNormalDict { point (0.40 0 0); normal (1 0 0); } interpolate true; }
+        crossCaudal  { type cuttingPlane; planeType pointAndNormal; pointAndNormalDict { point (1.42 0 0); normal (1 0 0); } interpolate true; }
+    }
+}
+}
