@@ -29,7 +29,7 @@ def write(path, text):
 def field(name, cls, dims, internal, walls_bc, body_bc):
     sides = ''.join(f'    {p}\n    {{\n{walls_bc}    }}\n' for p in ('inlet', 'outlet', 'sides'))
     return (head(cls, name, '0') + f'dimensions {dims};\ninternalField uniform {internal};\n\nboundaryField\n{{\n'
-            + sides + f'    body\n    {{\n{body_bc}    }}\n}}\n')
+            + sides + f'    body\n    {{\n{body_bc}    }}\n    #includeEtc "caseDicts/setConstraintTypes"\n}}\n')
 
 
 def make_case(name, design, out, n_proc=8, cond=PAPER, base_frac=0.08 / 1.107, levels=(5, 7), max_cells=3_000_000):

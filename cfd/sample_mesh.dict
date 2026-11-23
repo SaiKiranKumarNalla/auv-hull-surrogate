@@ -1,0 +1,15 @@
+FoamFile { version 2.0; format ascii; class dictionary; object meshcut; }
+meshcut
+{
+    type surfaces;
+    libs (sampling);
+    surfaceFormat vtk;
+    formatOptions { vtk { format ascii; legacy true; } }
+    fields (p);
+    interpolationScheme cell;
+    surfaces
+    {
+        sideCells { type cuttingPlane; point (0 0 0); normal (0 1 0); interpolate false; }
+        hullSurface { type patch; patches (body); interpolate false; }
+    }
+}
