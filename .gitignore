@@ -10,3 +10,4 @@ private/
 knowledge/papers/pdf/
 reference/
 .venv
+.ipynb_checkpoints/
