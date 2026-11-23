@@ -69,6 +69,8 @@ def make_case(design, name, orient, Re, out):
     save_stl(V, F, os.path.join(case, 'constant', 'triSurface', 'body.stl'))
     lo, hi = V.min(0), V.max(0); half = (hi - lo) / 2
     nu = 1.0 / Re; k = 1.5 * TURB_I ** 2; om = k / (NUT_RATIO * nu); h1 = first_layer(Re)
+    surf = BASE / 2 ** 6                                   # body surface cell (level 6)
+    n_layers = max(2, math.ceil(math.log(0.4 * surf / h1) / math.log(1.15)))   # grow layers up to ~0.4 cell; 2 at Re <= 3e6 as validated
     n = [math.ceil((BOX[a][1] - BOX[a][0]) / BASE) for a in 'xyz']
     pad = lambda v, p: v + p
     core = ([lo[0] - 0.8, -max(half[1] + 0.35, 0.6), -max(half[2] + 0.35, 0.6)],
@@ -79,7 +81,7 @@ def make_case(design, name, orient, Re, out):
     box = lambda nm, b: f'    {nm} {{ type searchableBox; min ({b[0][0]:.5f} {b[0][1]:.5f} {b[0][2]:.5f}); max ({b[1][0]:.5f} {b[1][1]:.5f} {b[1][2]:.5f}); }}\n'
     meta = dict(design=design.get('variant', {}).get('base', name), variant=design.get('variant', {}).get('index'),
                 orientation=orient, yaw_deg=yaw, pitch_deg=pitch, Re=Re, nu=nu, U=1.0, rho=1.0, L=1.0,
-                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, base_cell=BASE, box=BOX, recipe='nd-700K-v1',
+                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, n_layers=n_layers, base_cell=BASE, box=BOX, recipe='nd-700K-v1',
                 **info, recipe_json=design)
     write(os.path.join(case, 'case.json'), json.dumps(meta, indent=1, default=float))
 
@@ -151,7 +153,7 @@ snapControls
 addLayersControls
 {{
     relativeSizes false;
-    layers {{ body {{ nSurfaceLayers 2; }} }}
+    layers {{ body {{ nSurfaceLayers {n_layers}; }} }}
     firstLayerThickness {h1:.4e};
     expansionRatio 1.15;
     minThickness {0.2 * h1:.4e};

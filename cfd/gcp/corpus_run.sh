@@ -25,7 +25,7 @@ mesh() {
   cov=$(grep -h "^body " log.snappyHexMesh | tail -1 | awk '{print $5}')
   ok=$(grep -q 'Mesh OK' log.checkMesh && echo yes || echo no)
   gate=PASS; [ "$ok" = yes ] || gate=FAIL_checkMesh
-  awk -v c="${cov:-0}" 'BEGIN{exit !(c+0 < 85)}' && gate="${gate}_layers${cov}"
+  awk -v c="${cov:-0}" 'BEGIN{exit !(c+0 < 85)}' && gate="FAIL_layers${cov}"
   echo "$gate" > mesh_gate.txt
   echo "MESHED $id cells ${cells:-0} layers% ${cov:-?} checkMesh_ok $ok gate $gate" >> $LOG
 }
@@ -63,8 +63,7 @@ solve() {
   [ "$it" -eq 0 ] && return
   cd ..; s=$(basename $d)
   tar czf ~/out/pack_${s}.tgz --exclude='processor*' --exclude='0.orig' $s
-  gcloud storage cp ~/out/pack_${s}.tgz "$DEST/$id.tgz" > /dev/null 2>&1 && echo "UPLOADED $id $(du -h ~/out/pack_${s}.tgz | cut -f1)" >> $LOG
-  rm -f ~/out/pack_${s}.tgz
+  if gcloud storage cp ~/out/pack_${s}.tgz "$DEST/$id.tgz" > /dev/null 2>&1; then echo "UPLOADED $id $(du -h ~/out/pack_${s}.tgz | cut -f1)" >> $LOG; rm -f ~/out/pack_${s}.tgz; else echo "UPLOAD_FAILED $id (archive kept in ~/out)" >> $LOG; fi
   mkdir -p ~/out/small/$id; cp -r $s/postProcessing $s/log.* $s/case.json $s/*_gate.txt ~/out/small/$id/ 2>/dev/null
 }
 export -f mesh solve settled band uploaded
