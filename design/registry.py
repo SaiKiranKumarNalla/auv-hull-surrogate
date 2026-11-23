@@ -31,6 +31,9 @@ SOURCES = {
     'teos10': 'IOC/SCOR/IAPSO 2010, TEOS-10 manual: seawater properties valid for these T, S ranges',
     'ittc_water': 'ITTC Recommended Procedure 7.5-02-01-03, fresh and seawater density and viscosity',
     'knowledge03': 'knowledge/03-flow-conditions.md (project notes, motivated by REMUS-class operations)',
+    'sagong2013': 'Sagong et al. 2013, sailfish and swordfish hydrodynamics in gliding posture, PLOS ONE 8(12) e81323 (PMC3846759): '
+                  'C_D (wetted area) 0.0075 sailfish, 0.009 swordfish; bills ~17 % (sailfish) to 44 % (swordfish) of total length; '
+                  'swordfish pectoral fins ~15 % of wetted area but +51 % drag; FR of marlins/swordfish near drag-optimal',
 }
 
 
@@ -82,6 +85,21 @@ def ref(category, hull, fins, src, status, note):
     return dict(category=category, hull=hull, fins=fins, provenance=dict(source=src, status=status, note=note))
 
 
+def tail_fins(hull, rolls=(0, 90, 180, 270), name='tail', flap_f=0.0, flap=0.0):
+    """Default control fins sized from the hull (ASSUMPTION: span 0.45 D, root chord 0.5 D, tip chord 0.35 D, at 35 %
+    into the tail) - REMUS-class proportions, to be replaced by cited ratios once Prestero's fin data are read."""
+    p = hull['params']
+    if 'a' in p:
+        D, x_le = p['d'], p['a'] + p['b'] + 0.35 * p['c']
+    else:
+        D, x_le = p['t'] * p['L'], 0.78 * p['L']
+    return [fin(name, list(rolls), x_le, 0.5 * D, 0.35 * D, 0.45 * D, 20, 0.12, 'knowledge03', 'assumption',
+                flap_f=flap_f, flap=flap, note='default control fins sized from D')]
+
+
+BARE_ALLOWED = {'suboff_bare': 'SUBOFF bare hull has published experiments (validation anchor)',
+                'vardhan_swordfish1': 'the paper dataset is finless (replication link)'}
+
 REMUS_HULL = {'family': 'myring', 'params': dict(a=0.191, b=0.654, c=0.541, d=0.191, n=2.0, theta_deg=25.0)}
 SUBOFF_HULL = {'family': 'suboff_approx', 'params': {}}
 REMUS_FINS = fin('remus_tail', [0, 90, 180, 270], 1.17, 0.065, 0.045, 0.070, 10, 0.12, 'prestero2001', 'unverified',
@@ -89,10 +107,6 @@ REMUS_FINS = fin('remus_tail', [0, 90, 180, 270], 1.17, 0.065, 0.045, 0.070, 10,
 
 REFERENCES = {
     # --- real vehicles (validation anchors) ---
-    'remus100_bare': ref('vehicle', REMUS_HULL, [], 'prestero2001', 'unverified',
-                         'Myring a/b/c/d/n/theta recalled as 0.191/0.654/0.541/0.191 m, n 2, theta 0.436 rad (25 deg); '
-                         'Myring code 15/55/1.25/0.4363 cited via secondary sources. CHECK: these a+b+c give L = 1.386 m, '
-                         'not the 1.33 m envelope used in the paper, so at least one recalled value is wrong'),
     'remus100_finned': ref('vehicle', REMUS_HULL, [REMUS_FINS], 'prestero2001', 'unverified', 'hull + cruciform tail'),
     'suboff_bare': ref('vehicle', SUBOFF_HULL, [], 'suboff_secondary', 'cited',
                        'L 4.356 m, D 0.508 m and section breakpoints cited; bow/stern curves APPROXIMATE until groves1989 is read'),
@@ -106,20 +120,20 @@ REFERENCES = {
                               'are our fit (assumption) - the STL itself is the ground truth'),
     # --- Myring corners of the paper's design space ---
     'myring_blunt_n5': ref('myring', {'family': 'myring', 'params': dict(a=0.12, b=0.90, c=0.31, d=0.191, n=5.0, theta_deg=30)},
-                           [], 'vardhan_data', 'verified', 'n at the top of the data range'),
+                           tail_fins({'family': 'myring', 'params': dict(a=0.12, b=0.90, c=0.31, d=0.191, n=5.0, theta_deg=30)}), 'vardhan_data', 'verified', 'n at the top of the data range'),
     'myring_slender_ld15': ref('myring', {'family': 'myring', 'params': dict(a=0.25, b=1.25, c=0.40, d=0.127, n=2.0, theta_deg=15)},
-                               [], 'vardhan_data', 'verified', 'L/d 15, inside data range'),
+                               tail_fins({'family': 'myring', 'params': dict(a=0.25, b=1.25, c=0.40, d=0.127, n=2.0, theta_deg=15)}, rolls=(45, 135, 225, 315), name='x_tail'), 'vardhan_data', 'verified', 'L/d 15, inside data range'),
     'myring_fat_ld5': ref('myring', {'family': 'myring', 'params': dict(a=0.20, b=0.40, c=0.40, d=0.200, n=2.5, theta_deg=35)},
-                          [], 'vardhan_data', 'verified', 'L/d 5, the Phase-1 failure region (pressure drag)'),
+                          tail_fins({'family': 'myring', 'params': dict(a=0.20, b=0.40, c=0.40, d=0.200, n=2.5, theta_deg=35)}), 'vardhan_data', 'verified', 'L/d 5, the Phase-1 failure region (pressure drag)'),
     # --- other analytical families ---
-    'naca0014_body': ref('family', {'family': 'naca_body', 'params': dict(L=1.33, t=0.191 / 1.33)}, [], 'naca_tr824', 'cited',
+    'naca0014_body': ref('family', {'family': 'naca_body', 'params': dict(L=1.33, t=0.191 / 1.33)}, tail_fins({'family': 'naca_body', 'params': dict(L=1.33, t=0.191 / 1.33)}, rolls=(45, 135, 225, 315), name='x_tail'), 'naca_tr824', 'cited',
                          'NACA thickness law used as a body of revolution (our use of a standard section)'),
-    'von_karman': ref('family', {'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=0.0)}, [],
+    'von_karman': ref('family', {'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=0.0)}, tail_fins({'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=0.0)}),
                       'haack_series', 'cited', 'Haack C = 0 nose and mirrored tail; nose/tail lengths are assumptions'),
-    'lv_haack': ref('family', {'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=1 / 3)}, [],
+    'lv_haack': ref('family', {'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=1 / 3)}, tail_fins({'family': 'haack', 'params': dict(a=0.30, b=0.65, c=0.38, d=0.191, C=1 / 3)}, rolls=(45, 135, 225, 315), name='x_tail'),
                     'haack_series', 'cited', 'Haack C = 1/3'),
     'elliptic_parabolic': ref('family', {'family': 'elliptic', 'params': dict(a=0.15, b=0.88, c=0.30, d=0.191, tail_power=2.0)},
-                              [], 'jmse2026_review', 'assumption', 'Jackson-style approximation, exact family to be checked'),
+                              tail_fins({'family': 'elliptic', 'params': dict(a=0.15, b=0.88, c=0.30, d=0.191, tail_power=2.0)}), 'jmse2026_review', 'assumption', 'Jackson-style approximation, exact family to be checked'),
     'flat_stern': ref('family', {'family': 'flat_stern', 'params': dict(a=0.15, b=0.80, c=0.38, d=0.191, n=2.0, theta_deg=25,
                                                                          stern_ratio=0.45)},
                       [fin('tail', [0, 90, 180, 270], 1.02, 0.12, 0.08, 0.08, 20, 0.12, 'knowledge03', 'assumption')],
@@ -143,20 +157,31 @@ REFERENCES = {
                       fin('caudal', [90, 270], 0.90, 0.10, 0.03, 0.24, 60, 0.08, 'caudal_ar', 'assumption',
                           note='lunate tail approximated by two swept lobes; target AR about 6 (cited range 5.5-7.9)')],
                      'fish_fineness', 'cited', 'fineness 4.5 (Thunnus) cited; fin sizes are assumptions'),
-    'boxfish_like': ref('bio', {'family': 'fish_like', 'params': dict(L=0.6, t=1 / 2.6, x_max=0.45, tail=0.02),
-                                'width': 0.85, 'height': 1.0, 'p': 4.0},
-                        [fin('caudal', [90, 270], 0.53, 0.06, 0.05, 0.07, 10, 0.06, 'vanwassenbergh2015', 'assumption')],
-                        'vanwassenbergh2015', 'assumption',
-                        'boxy (superellipse p 4) carapace, fineness ~2.6 our estimate; real carapace geometry from CT in the cited study'),
     'manta_like': ref('bio', {'family': 'fish_like', 'params': dict(L=0.6, t=0.25, x_max=0.35, tail=0.005),
                               'width': 1.8, 'height': 0.45},
                       [fin('pectoral_wings', [0, 180], 0.08, 0.50, 0.05, 0.365, 40, 0.10, 'manta_uuv', 'assumption',
                            note='span ~1 m total incl. body; planform AR ~2.9 vs cited 2.5')],
                       'manta_uuv', 'cited', '1 m span and AR 2.5 cited; body flattening and chords are assumptions'),
-    'eel_like': ref('bio', {'family': 'fish_like', 'params': dict(L=1.0, t=1 / 16, x_max=0.25, tail=0.004), 'width': 0.8},
-                    [fin('dorsal_anal', [90, 270], 0.45, 0.50, 0.40, 0.025, 5, 0.06, 'caudal_ar', 'assumption',
-                         note='long low median fins, AR << 1 (anguilliform 0-1.61 cited)')],
-                    'caudal_ar', 'assumption', 'fineness 16 our choice for anguilliform'),
+    'swordfish_like': ref('bio', {'family': 'fish_like', 'params': dict(L=1.0, t=1 / 4.5, x_max=0.33, tail=0.01), 'width': 0.85,
+                                  'bill': dict(length=0.70, base_radius=0.035, width=2.5)},
+                          [fin('dorsal', [90], 0.22, 0.13, 0.02, 0.13, 50, 0.08, 'sagong2013', 'assumption'),
+                           fin('pectoral', [-25, 205], 0.24, 0.08, 0.02, 0.15, 55, 0.08, 'sagong2013', 'assumption',
+                               note='rigid sickle pectorals; cited: ~15 % of wetted area, +51 % drag'),
+                           fin('caudal', [90, 270], 0.88, 0.10, 0.03, 0.28, 60, 0.08, 'caudal_ar', 'assumption')],
+                          'sagong2013', 'cited', 'bill 41 % of total length (cited up to 44 %); C_D 0.009 is a validation '
+                                                 'target; body fineness 4.5 assumption (cited: near drag-optimal)'),
+    'sailfish_like': ref('bio', {'family': 'fish_like', 'params': dict(L=1.0, t=1 / 6.0, x_max=0.35, tail=0.008), 'width': 0.6,
+                                 'bill': dict(length=0.205, base_radius=0.02, width=1.0)},
+                         [fin('folded_sail', [90], 0.20, 0.50, 0.40, 0.03, 5, 0.06, 'sagong2013', 'assumption',
+                              note='dorsal sail folded as in the gliding posture tested'),
+                          fin('pectoral', [-25, 205], 0.22, 0.06, 0.02, 0.10, 55, 0.08, 'sagong2013', 'assumption'),
+                          fin('caudal', [90, 270], 0.88, 0.09, 0.025, 0.22, 60, 0.08, 'caudal_ar', 'assumption')],
+                         'sagong2013', 'cited', 'bill 17 % of total length cited; C_D 0.0075 validation target; fineness assumption'),
+    'wahoo_like': ref('bio', {'family': 'fish_like', 'params': dict(L=1.0, t=1 / 8.4, x_max=0.40, tail=0.006), 'width': 0.8},
+                      [fin('dorsal', [90], 0.18, 0.40, 0.30, 0.04, 10, 0.06, 'fish_fineness', 'assumption'),
+                       fin('pectoral', [-25, 205], 0.22, 0.05, 0.02, 0.06, 45, 0.08, 'fish_fineness', 'assumption'),
+                       fin('caudal', [90, 270], 0.90, 0.07, 0.02, 0.16, 60, 0.08, 'caudal_ar', 'assumption')],
+                      'fish_fineness', 'cited', 'fineness 8.4 (Acanthocybium) cited; fins are assumptions'),
 }
 
 
@@ -171,6 +196,9 @@ def check(build=True):
             if f['provenance']['source'] not in SOURCES:
                 problems.append(f'{k}/{f["name"]}: bad fin source')
     assert len(REFERENCES) == 20, len(REFERENCES)
+    for k, r in REFERENCES.items():
+        if not r['fins'] and k not in BARE_ALLOWED:
+            problems.append(f'{k}: no control surfaces (practical vehicles have them); add fins or justify in BARE_ALLOWED')
     results = {}
     if build:
         import appendages as ap

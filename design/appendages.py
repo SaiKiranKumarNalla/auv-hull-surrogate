@@ -121,9 +121,21 @@ def fin_manifold(fin, hull_spec, roll_deg, n_span=12):
     return to_manifold(*grid_mesh(np.array(loops)))
 
 
+def bill_manifold(bill, hull_spec, n=24, n_phi=48):
+    """Rostrum (swordfish/sailfish bill): a tapered superellipse spike ahead of the nose.
+    bill = {length, base_radius, width (y/z flattening, >1 = flat like a swordfish), embed (into the nose)}."""
+    Lb, rb = bill['length'], bill['base_radius']
+    x = np.linspace(-Lb, bill.get('embed', 0.03), n)
+    r = rb * np.clip((x + Lb) / Lb, 1e-4, 1.0) ** 0.8
+    X, Y, Z = hf.surface(x, r, n_phi, bill.get('width', 1.0), 1.0)
+    return to_manifold(*grid_mesh(np.stack([X, Y, Z], -1)))
+
+
 # ---------- assembly ----------
 def build(design):
     body = hull_manifold(design['hull'])
+    if design['hull'].get('bill'):
+        body = body + bill_manifold(design['hull']['bill'], design['hull'])
     for fin in design.get('fins', []):
         for roll in fin['rolls_deg']:
             body = body + fin_manifold(fin, design['hull'], roll)

@@ -11,7 +11,15 @@ provenance or does not build as one watertight solid.
 | unverified | recalled from a known source but not yet checked; **must be checked before CFD** |
 | assumption | our choice; the registry note gives the reason |
 
-Current count (2026-11-23): 11 verified, 11 cited, 2 unverified, 18 assumption.
+Current count (2026-11-23, revision 2): 11 verified, 14 cited, 1 unverified, 16 assumption.
+
+**Rule:** every reference has control surfaces, as practical vehicles do. Only two bare hulls are allowed, each with a
+stated reason (`BARE_ALLOWED`):
+- SUBOFF bare, because it has published experiments;
+- the paper's swordfish1, because the paper's dataset is finless.
+
+The bio set focuses on fast swimmers: tuna, swordfish (flat bill, about 41 % of length), sailfish (bill 17 %, sail
+folded), wahoo (fineness 8.4) and manta. The two fish that are not fast swimmers were dropped: boxfish and eel.
 
 ## Literature found (2026-11-23)
 - **REMUS 100:** Prestero 2001, MIT SM thesis ([DSpace](https://dspace.mit.edu/handle/1721.1/65068),
@@ -34,6 +42,11 @@ Current count (2026-11-23): 11 verified, 11 cited, 2 unverified, 18 assumption.
     ([CCU thesis](https://digitalcommons.coastal.edu/cgi/viewcontent.cgi?article=1188&context=etd)).
   - Boxfish: CFD shows the carapace is *destabilising* and its drag is not unusually low
     ([Van Wassenbergh et al. 2015](https://pmc.ncbi.nlm.nih.gov/articles/PMC4305415)).
+- **Swordfish / sailfish:** [Sagong et al. 2013, PLOS ONE](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0081323).
+  - Wind-tunnel C_D on wetted area: **0.009 for swordfish and 0.0075 for sailfish**. These are direct validation
+    targets for the bio references.
+  - Bills are about 17 % (sailfish) to 44 % (swordfish) of total length, and do not reduce drag at cruise speed.
+  - Swordfish pectoral fins are about 15 % of wetted area but add about 51 % drag.
 - **Manta:** a manta-ray UUV CFD study with 1 m span and pectoral-fin AR 2.5
   ([Bardera Mora et al. 2023](https://www.scipedia.com/wd/images/1/1b/Bardera_Mora_et_al_2023a_1121_hydro.pdf)).
   Gliding, aspect-ratio and fin-bending studies: [JMSE 2026](https://doi.org/10.3390/jmse14050406),
