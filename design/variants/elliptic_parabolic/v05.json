@@ -1,0 +1,58 @@
+{
+ "category": "family",
+ "hull": {
+  "family": "elliptic",
+  "params": {
+   "a": 0.14275224893069044,
+   "b": 0.837479860393384,
+   "c": 0.2855044978613809,
+   "d": 0.20080868318304873,
+   "tail_power": 1.668418495867607
+  }
+ },
+ "fins": [
+  {
+   "name": "tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.1156532066700802,
+   "root_chord": 0.10839324450578236,
+   "tip_chord": 0.07587527115404764,
+   "span": 0.10013297711322311,
+   "sweep_deg": 24.143118245696236,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": "default control fins sized from D"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "jmse2026_review",
+  "status": "assumption",
+  "note": "Jackson-style approximation, exact family to be checked"
+ },
+ "variant": {
+  "base": "elliptic_parabolic",
+  "index": 5,
+  "features": {
+   "length_scale": 0.9516816595379363,
+   "diam_scale": 1.0513543622149149,
+   "tail_power": 1.668418495867607,
+   "fin_span": 1.1081080926935605,
+   "fin_chord": 1.0795673054334571,
+   "fin_sweep": 4.143118245696238,
+   "fin_x": 0.028042582392753652
+  },
+  "redraws": 0,
+  "split": "test_base"
+ }
+}

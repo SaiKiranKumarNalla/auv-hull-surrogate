@@ -1,0 +1,57 @@
+{
+ "category": "vehicle",
+ "hull": {
+  "family": "suboff_approx",
+  "params": {
+   "L": 3.8136641428236824,
+   "d": 0.5462711871869821,
+   "x_fore": 0.8895047679313273,
+   "x_aft": 2.840987177103501,
+   "x_cap": 3.7304919450348284
+  }
+ },
+ "fins": [
+  {
+   "name": "suboff_stern",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 3.470954579551672,
+   "root_chord": 0.2282996389872997,
+   "tip_chord": 0.2282996389872997,
+   "span": 0.2407891006103672,
+   "sweep_deg": 0.0,
+   "thickness": 0.2,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "groves1989",
+    "status": "assumption",
+    "note": "4 stern appendages; sizes are placeholders until the report is read"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "groves1989",
+  "status": "assumption",
+  "note": "appendage geometry placeholder; sail not yet modelled"
+ },
+ "variant": {
+  "base": "suboff_appended",
+  "index": 8,
+  "features": {
+   "length_scale": 0.8754968188300465,
+   "diam_scale": 1.0753369826515395,
+   "fin_span": 1.017816674700915,
+   "fin_chord": 0.9230661104802622,
+   "fin_sweep": -3.590422254016021,
+   "fin_x": -0.0006245227510699551
+  },
+  "redraws": 0,
+  "split": "test_variant"
+ }
+}

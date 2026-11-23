@@ -1,0 +1,98 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 0.9161082425225137,
+   "t": 0.26804591308970516,
+   "x_max": 0.3925219079859686,
+   "tail": 0.012
+  },
+  "width": 0.8069720515398083
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.37332428038228666,
+   "root_chord": 0.17347630971316405,
+   "tip_chord": 0.06071670839960741,
+   "span": 0.09360761739909365,
+   "sweep_deg": 39.346093460389135,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -20,
+    200
+   ],
+   "x_le": 0.28171345613003534,
+   "root_chord": 0.11152048481560545,
+   "tip_chord": 0.0390321696854619,
+   "span": 0.13372516771299092,
+   "sweep_deg": 44.346093460389135,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.7647133454517211,
+   "root_chord": 0.12391164979511718,
+   "tip_chord": 0.04336907742829101,
+   "span": 0.3209404025111782,
+   "sweep_deg": 54.346093460389135,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": "lunate tail approximated by two swept lobes; target AR about 6 (cited range 5.5-7.9)"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "fish_fineness",
+  "status": "cited",
+  "note": "fineness 4.5 (Thunnus) cited; fin sizes are assumptions"
+ },
+ "variant": {
+  "base": "tuna_like",
+  "index": 0,
+  "features": {
+   "length_scale": 0.9161082425225137,
+   "diam_scale": 1.1050158166017852,
+   "fish_x_max": 0.012521907985968576,
+   "fish_width": 0.9493788841644805,
+   "fin_span": 1.2101651913384466,
+   "fin_chord": 1.121356345614836,
+   "fin_sweep": -5.653906539610865,
+   "fin_x": 0.02751110300496188
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

@@ -1,0 +1,60 @@
+{
+ "category": "myring",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.2185476253737255,
+   "b": 0.437095250747451,
+   "c": 0.437095250747451,
+   "d": 0.184134684192248,
+   "n": 3.9048567108192103,
+   "theta_deg": 20.982972631385294
+  }
+ },
+ "fins": [
+  {
+   "name": "tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 0.7870543667642644,
+   "root_chord": 0.08955234579305665,
+   "tip_chord": 0.06268664205513964,
+   "span": 0.07962988763424424,
+   "sweep_deg": 19.625079298953366,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": "default control fins sized from D"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "vardhan_data",
+  "status": "verified",
+  "note": "L/d 5, the Phase-1 failure region (pressure drag)"
+ },
+ "variant": {
+  "base": "myring_fat_ld5",
+  "index": 9,
+  "features": {
+   "length_scale": 1.0927381268686274,
+   "diam_scale": 0.9206734209612398,
+   "myring_n": 3.9048567108192103,
+   "myring_theta": 20.982972631385294,
+   "fin_span": 0.9610101792073231,
+   "fin_chord": 0.972683079083118,
+   "fin_sweep": -0.37492070104663533,
+   "fin_x": -0.019741094950476906
+  },
+  "redraws": 0,
+  "split": "test_variant"
+ }
+}

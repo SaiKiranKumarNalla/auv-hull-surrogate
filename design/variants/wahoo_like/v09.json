@@ -1,0 +1,98 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 1.040485111855237,
+   "t": 0.09773652832275967,
+   "x_max": 0.38227303972735815,
+   "tail": 0.006
+  },
+  "width": 0.7618905589915587
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.16746970350403434,
+   "root_chord": 0.352861740146054,
+   "tip_chord": 0.26464630510954046,
+   "span": 0.04032728604691709,
+   "sweep_deg": 12.237236671449361,
+   "thickness": 0.06,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.20908910797824382,
+   "root_chord": 0.04410771751825675,
+   "tip_chord": 0.025,
+   "span": 0.06049092907037563,
+   "sweep_deg": 47.23723667144936,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.9166189840398049,
+   "root_chord": 0.06175080452555945,
+   "tip_chord": 0.025,
+   "span": 0.16130914418766837,
+   "sweep_deg": 62.23723667144936,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "fish_fineness",
+  "status": "cited",
+  "note": "fineness 8.4 (Acanthocybium) cited; fins are assumptions"
+ },
+ "variant": {
+  "base": "wahoo_like",
+  "index": 9,
+  "features": {
+   "length_scale": 1.040485111855237,
+   "diam_scale": 0.8542245818756927,
+   "fish_x_max": -0.01772696027264184,
+   "fish_width": 0.9523631987394483,
+   "fin_span": 1.1802307877387195,
+   "fin_chord": 1.0326960486528196,
+   "fin_sweep": 2.2372366714493612,
+   "fin_x": -0.019046516287554084
+  },
+  "redraws": 0,
+  "split": "test_base"
+ }
+}

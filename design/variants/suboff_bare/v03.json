@@ -1,0 +1,29 @@
+{
+ "category": "vehicle",
+ "hull": {
+  "family": "suboff_approx",
+  "params": {
+   "L": 4.185009198788365,
+   "d": 0.5326421008473767,
+   "x_fore": 0.9761178480185903,
+   "x_aft": 3.1176204889963834,
+   "x_cap": 4.093738337014973
+  }
+ },
+ "fins": [],
+ "provenance": {
+  "source": "suboff_secondary",
+  "status": "cited",
+  "note": "L 4.356 m, D 0.508 m and section breakpoints cited; bow/stern curves APPROXIMATE until groves1989 is read"
+ },
+ "variant": {
+  "base": "suboff_bare",
+  "index": 3,
+  "features": {
+   "length_scale": 0.9607459134041243,
+   "diam_scale": 1.0485080725342062
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

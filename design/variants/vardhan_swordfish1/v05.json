@@ -1,0 +1,32 @@
+{
+ "category": "dataset",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.17057004206270365,
+   "b": 0.5799381430131925,
+   "c": 0.19359699774116865,
+   "d": 0.052807124962424234,
+   "n": 2.7234571859658923,
+   "theta_deg": 29.669258949837435
+  }
+ },
+ "fins": [],
+ "provenance": {
+  "source": "vardhan_case",
+  "status": "verified",
+  "note": "L 1.107 m, d 0.052 m verified from the paper case (problem_def lref, bounding box); a/b/c/n/theta are our fit (assumption) - the STL itself is the ground truth"
+ },
+ "variant": {
+  "base": "vardhan_swordfish1",
+  "index": 5,
+  "features": {
+   "length_scale": 0.8528502103135183,
+   "diam_scale": 1.0155216338927737,
+   "myring_n": 2.7234571859658923,
+   "myring_theta": 29.669258949837435
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

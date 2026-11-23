@@ -1,0 +1,104 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 0.8621020651493305,
+   "t": 0.24020040801535505,
+   "x_max": 0.3558547295319453,
+   "tail": 0.01
+  },
+  "width": 0.8028963212832415,
+  "bill": {
+   "length": 0.6494462899175878,
+   "base_radius": 0.03261466967846054,
+   "width": 2.5
+  }
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.1648843916107448,
+   "root_chord": 0.13165227811655736,
+   "tip_chord": 0.04607829734079507,
+   "span": 0.1448215297300924,
+   "sweep_deg": 51.57575871293912,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.18212643291373143,
+   "root_chord": 0.08101678653326606,
+   "tip_chord": 0.02835587528664312,
+   "span": 0.16710176507318353,
+   "sweep_deg": 56.57575871293912,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": "rigid sickle pectorals; cited: ~15 % of wetted area, +51 % drag"
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.733871754609303,
+   "root_chord": 0.10127098316658259,
+   "tip_chord": 0.035444844108303904,
+   "span": 0.3076106113684946,
+   "sweep_deg": 61.57575871293912,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "sagong2013",
+  "status": "cited",
+  "note": "bill 41 % of total length (cited up to 44 %); C_D 0.009 is a validation target; body fineness 4.5 assumption (cited: near drag-optimal)"
+ },
+ "variant": {
+  "base": "swordfish_like",
+  "index": 1,
+  "features": {
+   "length_scale": 0.8621020651493305,
+   "diam_scale": 0.9318477050988724,
+   "fish_x_max": 0.025854729531945266,
+   "fish_width": 0.9445839073920489,
+   "bill_scale": 1.076183959734832,
+   "fin_span": 1.195486946052366,
+   "fin_chord": 1.0867761181623274,
+   "fin_sweep": 1.5757587129391233,
+   "fin_x": -0.028741449213227355
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

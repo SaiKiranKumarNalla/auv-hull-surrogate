@@ -1,0 +1,60 @@
+{
+ "category": "myring",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.2519292113749697,
+   "b": 1.2596460568748484,
+   "c": 0.40308673819995156,
+   "d": 0.14004600022742972,
+   "n": 2.1583345945849617,
+   "theta_deg": 20.635521897619356
+  }
+ },
+ "fins": [
+  {
+   "name": "x_tail",
+   "rolls_deg": [
+    45,
+    135,
+    225,
+    315
+   ],
+   "x_le": 1.6862482495906135,
+   "root_chord": 0.07611193166442888,
+   "tip_chord": 0.05327835216510021,
+   "span": 0.05216823446057699,
+   "sweep_deg": 12.732518762737199,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": "default control fins sized from D"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "vardhan_data",
+  "status": "verified",
+  "note": "L/d 15, inside data range"
+ },
+ "variant": {
+  "base": "myring_slender_ld15",
+  "index": 2,
+  "features": {
+   "length_scale": 1.0077168454998788,
+   "diam_scale": 1.102724411239604,
+   "myring_n": 2.1583345945849617,
+   "myring_theta": 20.635521897619356,
+   "fin_span": 0.8277952224563935,
+   "fin_chord": 1.086956164986159,
+   "fin_sweep": -7.2674812372628015,
+   "fin_x": 0.017544936316515172
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

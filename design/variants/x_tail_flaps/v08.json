@@ -1,0 +1,61 @@
+{
+ "category": "appendage",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.2067973046706795,
+   "b": 0.7080912945268293,
+   "c": 0.5857452451666891,
+   "d": 0.20170368243866904,
+   "n": 3.181729564982586,
+   "theta_deg": 16.233816867168365
+  }
+ },
+ "fins": [
+  {
+   "name": "x_tail",
+   "rolls_deg": [
+    45,
+    135,
+    225,
+    315
+   ],
+   "x_le": 1.2497683495581433,
+   "root_chord": 0.11776331061579744,
+   "tip_chord": 0.07494028857368928,
+   "span": 0.12910943609190084,
+   "sweep_deg": 27.701242216919834,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.35,
+   "flap_deg": 18.25030809421332,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "knowledge03",
+  "status": "assumption",
+  "note": "X-tail with trailing-edge flaps"
+ },
+ "variant": {
+  "base": "x_tail_flaps",
+  "index": 8,
+  "features": {
+   "length_scale": 1.0827084014171702,
+   "diam_scale": 1.0560402221919845,
+   "myring_n": 3.181729564982586,
+   "myring_theta": 16.233816867168365,
+   "fin_span": 1.2225806686028782,
+   "fin_chord": 1.0137639917071994,
+   "fin_sweep": 2.701242216919834,
+   "fin_x": 0.024746169833752253,
+   "ctrl_angle": 0.9125154047106661
+  },
+  "redraws": 0,
+  "split": "test_variant"
+ }
+}

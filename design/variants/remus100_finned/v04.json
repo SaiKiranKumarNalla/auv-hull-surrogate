@@ -1,0 +1,60 @@
+{
+ "category": "vehicle",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.21906167685896358,
+   "b": 0.7500855322814775,
+   "c": 0.6204835978047084,
+   "d": 0.16370646902972769,
+   "n": 3.2660977090022096,
+   "theta_deg": 38.286206668366475
+  }
+ },
+ "fins": [
+  {
+   "name": "remus_tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.2949533676322194,
+   "root_chord": 0.05136855754484826,
+   "tip_chord": 0.03556284753104879,
+   "span": 0.06289573178130654,
+   "sweep_deg": 9.72937799175129,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "prestero2001",
+    "status": "unverified",
+    "note": "NACA 0012 cruciform; planform values to be checked in Prestero Table/appendix"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "prestero2001",
+  "status": "unverified",
+  "note": "hull + cruciform tail"
+ },
+ "variant": {
+  "base": "remus100_finned",
+  "index": 4,
+  "features": {
+   "length_scale": 1.1469197741306993,
+   "diam_scale": 0.857101932092815,
+   "myring_n": 3.2660977090022096,
+   "myring_theta": 38.286206668366475,
+   "fin_span": 1.0483122489582322,
+   "fin_chord": 0.9220437746071883,
+   "fin_sweep": -0.27062200824870963,
+   "fin_x": -0.02953061043835103
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "category": "family",
+ "hull": {
+  "family": "haack",
+  "params": {
+   "a": 0.34151619724997523,
+   "b": 0.7399517607082796,
+   "c": 0.43258718318330197,
+   "d": 0.20836652798208888,
+   "C": 0.3075620183790955
+  }
+ },
+ "fins": [
+  {
+   "name": "tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.2114084209013996,
+   "root_chord": 0.0971629446273582,
+   "tip_chord": 0.06801406123915073,
+   "span": 0.08402424575234395,
+   "sweep_deg": 19.430190264648417,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": "default control fins sized from D"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "haack_series",
+  "status": "cited",
+  "note": "Haack C = 0 nose and mirrored tail; nose/tail lengths are assumptions"
+ },
+ "variant": {
+  "base": "von_karman",
+  "index": 8,
+  "features": {
+   "length_scale": 1.138387324166584,
+   "diam_scale": 1.0909242302727167,
+   "haack_C": 0.3075620183790955,
+   "fin_span": 0.8961158393557833,
+   "fin_chord": 0.9326156707444901,
+   "fin_sweep": -0.5698097353515852,
+   "fin_x": -0.014177192486415538
+  },
+  "redraws": 0,
+  "split": "test_variant"
+ }
+}

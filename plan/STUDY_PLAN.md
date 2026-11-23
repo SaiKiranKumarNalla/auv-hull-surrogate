@@ -46,6 +46,9 @@ flowchart TB
 | Waves | Not in this corpus | Needs a free-surface solver (10–50× cost); later, as a depth parameter |
 | Geometry | Every shape passes the quality gate (`design/quality.py`) | No bad junctions or needle tips reach the mesher |
 
+Variant ranges per base, gallery and split assignment: [VARIANT_RANGES.md](VARIANT_RANGES.md)
+(200/200 variants pass the geometry gate; 136 train, 34 unseen-variant, 30 unseen-base).
+
 Test splits, fixed before training:
 
 | Split | Held out | Question |

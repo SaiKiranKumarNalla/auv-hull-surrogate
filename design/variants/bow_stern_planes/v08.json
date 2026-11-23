@@ -1,0 +1,80 @@
+{
+ "category": "appendage",
+ "hull": {
+  "family": "haack",
+  "params": {
+   "a": 0.31143861342927814,
+   "b": 0.6747836624301027,
+   "c": 0.39448891034375233,
+   "d": 0.2188763679620808,
+   "C": 0.0009105613850105554
+  }
+ },
+ "fins": [
+  {
+   "name": "bow_planes",
+   "rolls_deg": [
+    0,
+    180
+   ],
+   "x_le": 0.3252794311147099,
+   "root_chord": 0.09010610694415812,
+   "tip_chord": 0.06436150496011293,
+   "span": 0.0886404670698996,
+   "sweep_deg": 8.935303746751181,
+   "thickness": 0.12,
+   "deflection_deg": 7.3114349384094535,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "stern",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.1350198260308333,
+   "root_chord": 0.12872300992022587,
+   "tip_chord": 0.07723380595213553,
+   "span": 0.11396631480415662,
+   "sweep_deg": 33.93530374675118,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "knowledge03",
+  "status": "assumption",
+  "note": "forward and aft control planes"
+ },
+ "variant": {
+  "base": "bow_stern_planes",
+  "index": 8,
+  "features": {
+   "length_scale": 1.0381287114309272,
+   "diam_scale": 1.1459495704820983,
+   "haack_C": 0.0009105613850105554,
+   "fin_span": 1.105015804648476,
+   "fin_chord": 1.1232868638894153,
+   "fin_sweep": 3.935303746751181,
+   "fin_x": -0.005013182055996192,
+   "ctrl_angle": 0.7311434938409453
+  },
+  "redraws": 0,
+  "split": "test_base"
+ }
+}

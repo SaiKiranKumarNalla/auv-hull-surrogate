@@ -1,0 +1,80 @@
+{
+ "category": "appendage",
+ "hull": {
+  "family": "myring",
+  "params": {
+   "a": 0.17938022245732946,
+   "b": 0.6142129083093898,
+   "c": 0.5080874363843729,
+   "d": 0.1965308695438643,
+   "n": 1.5456659602776994,
+   "theta_deg": 24.393164741843812
+  }
+ },
+ "fins": [
+  {
+   "name": "rudder",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 1.032018607961963,
+   "root_chord": 0.12296600787405802,
+   "tip_chord": 0.0878328627671843,
+   "span": 0.2697123811914939,
+   "sweep_deg": 7.2526943688472585,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.4,
+   "flap_deg": 9.67283235753259,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "elevators",
+   "rolls_deg": [
+    0,
+    180
+   ],
+   "x_le": 1.088368416063742,
+   "root_chord": 0.07904957649046586,
+   "tip_chord": 0.05269971766031058,
+   "span": 0.0980772295241796,
+   "sweep_deg": 12.252694368847258,
+   "thickness": 0.12,
+   "deflection_deg": -3.2242774525108633,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "knowledge03",
+  "status": "assumption",
+  "note": "tall rudder with flap + small elevators"
+ },
+ "variant": {
+  "base": "tall_rudder",
+  "index": 1,
+  "features": {
+   "length_scale": 0.9391634683629814,
+   "diam_scale": 1.028957432166829,
+   "myring_n": 1.5456659602776994,
+   "myring_theta": 24.393164741843812,
+   "fin_span": 1.19146364147499,
+   "fin_chord": 0.8536102662888742,
+   "fin_sweep": -2.7473056311527415,
+   "fin_x": 0.013614755092127312,
+   "ctrl_angle": 0.6448554905021726
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

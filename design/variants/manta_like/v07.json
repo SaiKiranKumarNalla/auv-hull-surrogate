@@ -1,0 +1,58 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 0.6623837856176502,
+   "t": 0.24983708153997722,
+   "x_max": 0.3350888547438015,
+   "tail": 0.005
+  },
+  "width": 1.879658885633006,
+  "height": 0.45
+ },
+ "fins": [
+  {
+   "name": "pectoral_wings",
+   "rolls_deg": [
+    0,
+    180
+   ],
+   "x_le": 0.07919985662801549,
+   "root_chord": 0.5122843632691314,
+   "tip_chord": 0.17929952714419597,
+   "span": 0.35377393933414103,
+   "sweep_deg": 43.4130421919113,
+   "thickness": 0.1,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "manta_uuv",
+    "status": "assumption",
+    "note": "span ~1 m total incl. body; planform AR ~2.9 vs cited 2.5"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "manta_uuv",
+  "status": "cited",
+  "note": "1 m span and AR 2.5 cited; body flattening and chords are assumptions"
+ },
+ "variant": {
+  "base": "manta_like",
+  "index": 7,
+  "features": {
+   "length_scale": 1.103972976029417,
+   "diam_scale": 1.103253545720771,
+   "fish_x_max": -0.014911145256198459,
+   "fish_width": 1.0442549364627811,
+   "fin_span": 0.8785321136451776,
+   "fin_chord": 0.9286792963524062,
+   "fin_sweep": 3.4130421919113054,
+   "fin_x": -0.013765405573500988
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

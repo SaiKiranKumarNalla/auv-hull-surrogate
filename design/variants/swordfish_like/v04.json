@@ -1,0 +1,104 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 1.0943531261742572,
+   "t": 0.19320064492284178,
+   "x_max": 0.30635868096005303,
+   "tail": 0.01
+  },
+  "width": 0.848192221075695,
+  "bill": {
+   "length": 0.6113288449624827,
+   "base_radius": 0.03330018243565564,
+   "width": 2.5
+  }
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.2559864867166129,
+   "root_chord": 0.11469550498496998,
+   "tip_chord": 0.040143426744739495,
+   "span": 0.11572919913314035,
+   "sweep_deg": 40.62989733635267,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.277873549240098,
+   "root_chord": 0.07058184922151998,
+   "tip_chord": 0.025,
+   "span": 0.13353369130746964,
+   "sweep_deg": 45.62989733635267,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": "rigid sickle pectorals; cited: ~15 % of wetted area, +51 % drag"
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.9732952208621294,
+   "root_chord": 0.0882273115269,
+   "tip_chord": 0.030879559034414996,
+   "span": 0.24926289044061,
+   "sweep_deg": 50.62989733635267,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "sagong2013",
+  "status": "cited",
+  "note": "bill 41 % of total length (cited up to 44 %); C_D 0.009 is a validation target; body fineness 4.5 assumption (cited: near drag-optimal)"
+ },
+ "variant": {
+  "base": "swordfish_like",
+  "index": 4,
+  "features": {
+   "length_scale": 1.0943531261742572,
+   "diam_scale": 0.9514337838758754,
+   "fish_x_max": -0.023641319039946988,
+   "fish_width": 0.9978732012655236,
+   "bill_scale": 0.7980302705654381,
+   "fin_span": 0.9356663845695472,
+   "fin_chord": 0.9273090048104722,
+   "fin_sweep": -9.370102663647328,
+   "fin_x": 0.013915799748765348
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

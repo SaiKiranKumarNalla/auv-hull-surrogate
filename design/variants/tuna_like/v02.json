@@ -1,0 +1,98 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 1.1312111053735139,
+   "t": 0.19843041952479543,
+   "x_max": 0.4031668188145902,
+   "tail": 0.012
+  },
+  "width": 0.7915981596692503
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.41547786701681627,
+   "root_chord": 0.14744646033473313,
+   "tip_chord": 0.05160626111715659,
+   "span": 0.08076722642724254,
+   "sweep_deg": 50.94881007799961,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -20,
+    200
+   ],
+   "x_le": 0.30235675647946486,
+   "root_chord": 0.09478701021518558,
+   "tip_chord": 0.03317545357531495,
+   "span": 0.11538175203891793,
+   "sweep_deg": 55.94881007799961,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.9919558719732133,
+   "root_chord": 0.1053189002390951,
+   "tip_chord": 0.03686161508368328,
+   "span": 0.276916204893403,
+   "sweep_deg": 65.0,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": "lunate tail approximated by two swept lobes; target AR about 6 (cited range 5.5-7.9)"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "fish_fineness",
+  "status": "cited",
+  "note": "fineness 4.5 (Thunnus) cited; fin sizes are assumptions"
+ },
+ "variant": {
+  "base": "tuna_like",
+  "index": 2,
+  "features": {
+   "length_scale": 1.1312111053735139,
+   "diam_scale": 1.0101001239466827,
+   "fish_x_max": 0.023166818814590213,
+   "fish_width": 0.9312919525520592,
+   "fin_span": 1.1422803472995935,
+   "fin_chord": 1.042658027083405,
+   "fin_sweep": 5.948810077999614,
+   "fin_x": -0.012714119368877768
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

@@ -1,0 +1,54 @@
+{
+ "category": "family",
+ "hull": {
+  "family": "naca_body",
+  "params": {
+   "L": 1.2955680910171852,
+   "t": 0.1623967772478423
+  }
+ },
+ "fins": [
+  {
+   "name": "x_tail",
+   "rolls_deg": [
+    45,
+    135,
+    225,
+    315
+   ],
+   "x_le": 0.9797300355369641,
+   "root_chord": 0.11891082010905601,
+   "tip_chord": 0.08323757407633921,
+   "span": 0.07836088731845191,
+   "sweep_deg": 24.922585561915067,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": "default control fins sized from D"
+   }
+  }
+ ],
+ "provenance": {
+  "source": "naca_tr824",
+  "status": "cited",
+  "note": "NACA thickness law used as a body of revolution (our use of a standard section)"
+ },
+ "variant": {
+  "base": "naca0014_body",
+  "index": 7,
+  "features": {
+   "length_scale": 0.9741113466294624,
+   "diam_scale": 1.1015501711326183,
+   "fin_span": 0.8276546926575896,
+   "fin_chord": 1.1303520349885479,
+   "fin_sweep": 4.922585561915067,
+   "fin_x": -0.023783447331007002
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

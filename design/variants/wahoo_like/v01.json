@@ -1,0 +1,98 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 0.9353137697261867,
+   "t": 0.1325078841540798,
+   "x_max": 0.4091251264507391,
+   "tail": 0.006
+  },
+  "width": 0.7771580723962058
+ },
+ "fins": [
+  {
+   "name": "dorsal",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.1445694176627192,
+   "root_chord": 0.44722826802048976,
+   "tip_chord": 0.3354212010153673,
+   "span": 0.04237235374372225,
+   "sweep_deg": 2.661351862550341,
+   "thickness": 0.06,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.18198196845176662,
+   "root_chord": 0.05590353350256122,
+   "tip_chord": 0.025,
+   "span": 0.06355853061558336,
+   "sweep_deg": 37.66135186255034,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "fish_fineness",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.8179953318655736,
+   "root_chord": 0.07826494690358572,
+   "tip_chord": 0.027392731416255,
+   "span": 0.169489414974889,
+   "sweep_deg": 52.66135186255034,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "fish_fineness",
+  "status": "cited",
+  "note": "fineness 8.4 (Acanthocybium) cited; fins are assumptions"
+ },
+ "variant": {
+  "base": "wahoo_like",
+  "index": 1,
+  "features": {
+   "length_scale": 0.9353137697261867,
+   "diam_scale": 1.0410661686313831,
+   "fish_x_max": 0.009125126450739103,
+   "fish_width": 0.9714475904952572,
+   "fin_span": 1.0175230696293354,
+   "fin_chord": 1.073966961697616,
+   "fin_sweep": -7.338648137449659,
+   "fin_x": -0.02543217223772735
+  },
+  "redraws": 0,
+  "split": "test_base"
+ }
+}

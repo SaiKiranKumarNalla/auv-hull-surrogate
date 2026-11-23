@@ -1,0 +1,104 @@
+{
+ "category": "bio",
+ "hull": {
+  "family": "fish_like",
+  "params": {
+   "L": 0.8829115726071612,
+   "t": 0.17658223551271224,
+   "x_max": 0.378354607125852,
+   "tail": 0.008
+  },
+  "width": 0.6288348627608175,
+  "bill": {
+   "length": 0.17131886950638928,
+   "base_radius": 0.018708779910122025,
+   "width": 1.0
+  }
+ },
+ "fins": [
+  {
+   "name": "folded_sail",
+   "rolls_deg": [
+    90
+   ],
+   "x_le": 0.18275331098126468,
+   "root_chord": 0.4062697270691714,
+   "tip_chord": 0.3250157816553372,
+   "span": 0.03460005379381123,
+   "sweep_deg": 12.363156998136375,
+   "thickness": 0.06,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": "dorsal sail folded as in the gliding posture tested"
+   }
+  },
+  {
+   "name": "pectoral",
+   "rolls_deg": [
+    -25,
+    205
+   ],
+   "x_le": 0.20041154243340792,
+   "root_chord": 0.048752367248300565,
+   "tip_chord": 0.025,
+   "span": 0.11533351264603744,
+   "sweep_deg": 62.363156998136375,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "sagong2013",
+    "status": "assumption",
+    "note": ""
+   }
+  },
+  {
+   "name": "caudal",
+   "rolls_deg": [
+    90,
+    270
+   ],
+   "x_le": 0.7831331803541344,
+   "root_chord": 0.07312855087245085,
+   "tip_chord": 0.025594992805357795,
+   "span": 0.22212797327506945,
+   "sweep_deg": 65.0,
+   "thickness": 0.08,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "caudal_ar",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "sagong2013",
+  "status": "cited",
+  "note": "bill 17 % of total length cited; C_D 0.0075 validation target; fineness assumption"
+ },
+ "variant": {
+  "base": "sailfish_like",
+  "index": 3,
+  "features": {
+   "length_scale": 0.8829115726071612,
+   "diam_scale": 0.9354389955061012,
+   "fish_x_max": 0.028354607125852048,
+   "fish_width": 1.0480581046013624,
+   "bill_scale": 0.946529446887231,
+   "fin_span": 1.2329346242791437,
+   "fin_chord": 0.8686183257719912,
+   "fin_sweep": 7.363156998136375,
+   "fin_x": 0.006989370907904205
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}

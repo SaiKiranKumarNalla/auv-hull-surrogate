@@ -83,7 +83,7 @@ volume fields on a fixed point cloud and on a 128×64×64 grid. Stored in a GCP 
 
 | Stage | State |
 |---|---|
-| Sampler | Free sampler exists; per-base variant ranges to write |
+| Sampler | **Done**: per-base variants in `design/variants.py`, 200 designs in `design/variants/` |
 | Geometry gate | **Done** |
 | Mesher + mesh gate | Recipe done; gate thresholds to wire in |
 | Solver + result gate | Done for one condition; multi-condition mapped runs to add |

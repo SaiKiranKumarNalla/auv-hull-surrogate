@@ -1,0 +1,62 @@
+{
+ "category": "family",
+ "hull": {
+  "family": "flat_stern",
+  "params": {
+   "a": 0.15894445409079683,
+   "b": 0.8477037551509166,
+   "c": 0.40265928369668536,
+   "d": 0.16984271183826563,
+   "n": 2.809460013928581,
+   "theta_deg": 20.211331159222986,
+   "stern_ratio": 0.5258781673575341
+  }
+ },
+ "fins": [
+  {
+   "name": "tail",
+   "rolls_deg": [
+    0,
+    90,
+    180,
+    270
+   ],
+   "x_le": 1.0840871050878205,
+   "root_chord": 0.09791487180586383,
+   "tip_chord": 0.06527658120390922,
+   "span": 0.08734197242997305,
+   "sweep_deg": 26.383184259338456,
+   "thickness": 0.12,
+   "deflection_deg": 0.0,
+   "flap_fraction": 0.0,
+   "flap_deg": 0.0,
+   "provenance": {
+    "source": "knowledge03",
+    "status": "assumption",
+    "note": ""
+   }
+  }
+ ],
+ "provenance": {
+  "source": "jmse2026_flatstern",
+  "status": "cited",
+  "note": "Myring forebody n in 1-3 cited; stern ratio our choice"
+ },
+ "variant": {
+  "base": "flat_stern",
+  "index": 3,
+  "features": {
+   "length_scale": 1.0596296939386456,
+   "diam_scale": 0.8892288577919666,
+   "myring_n": 2.809460013928581,
+   "myring_theta": 20.211331159222986,
+   "stern_ratio": 0.5258781673575341,
+   "fin_span": 1.227776905582704,
+   "fin_chord": 0.9176009729092227,
+   "fin_sweep": 6.3831842593384565,
+   "fin_x": 0.0023166110212006277
+  },
+  "redraws": 0,
+  "split": "train"
+ }
+}
