@@ -24,7 +24,8 @@ from casegen import head, write, field
 BOX = dict(x=(-2.0, 4.0), y=(-2.0, 2.0), z=(-2.0, 2.0))
 BASE = 0.107
 TURB_I, NUT_RATIO = 0.041, 100.0           # inlet intensity and nu_t/nu as in the paper case (k 0.01, omega 57 at 2 m/s)
-ORIENTATIONS = {'front': (0, 0), 'yaw10': (10, 0), 'yaw30': (30, 0), 'side': (90, 0), 'top': (0, 90)}
+ORIENTATIONS = {'front': (0, 0), 'yaw10': (10, 0), 'yaw30': (30, 0)}
+# side (90, 0) and top (0, 90) removed 2026-11-23: broadside flow sheds vortices, steady RANS cannot settle
 RES = (1e6, 3e6, 1e7)
 ITER_CAP, ITER_MIN = 600, 200
 
