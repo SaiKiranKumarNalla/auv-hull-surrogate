@@ -49,6 +49,10 @@ def main(case, out):
     w = imageio.get_writer(out, fps=FPS, quality=8, macro_block_size=8)
     for f in range(FRAMES):
         new = np.column_stack([np.full(N_NEW, BOX[0] + 0.01), rng.uniform(BOX[2], BOX[3], N_NEW)])
+        extra = np.column_stack([rng.uniform(BOX[0], BOX[1], 10),
+                                 np.r_[rng.uniform(BOX[2], BOX[3], 4), rng.normal(0, 0.06, 6)]])   # bias toward the wake line
+        extra = extra[np.isfinite(vel(extra)).all(1)]                    # also release inside the field (fills the wake)
+        new = np.concatenate([new, extra])
         hist = np.concatenate([hist, np.repeat(new[:, None], TRAIL, 1)])
         p = hist[:, -1]
         k1 = vel(p); k2 = vel(p + 0.5 * DT * np.nan_to_num(k1))           # midpoint (RK2) step
