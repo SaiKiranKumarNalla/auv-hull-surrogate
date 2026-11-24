@@ -102,6 +102,19 @@ a mesh effect. Every run passed the mesh and result checks. Cost ≈ €5.
 **Corpus box:** 7 L long, side walls at max(2 L, 2 W). Slim hulls get the 4 L × 4 L section; the manta gets
 7.3 L × 7.3 L, wider than the 10 L box above, so the side walls are not the limiting factor for any shape.
 
+### Large-area shapes: mesh kept under ~1.4M cells
+
+The near-body recipe scales with surface area, so the manta (wetted area 2.2–2.6 L², vs 0.41 for REMUS) reached
+3.4–4.5M cells. Shapes with wetted area above 0.8 L² (only the manta) now use surface levels 4–5, a level-3 near-wake
+box and 3 cells between levels. All other shapes keep the validated recipe (~0.7M).
+
+| Manta mesh | Cells | Iterations | Solve time | Drag coefficient | vs 4M mesh, 8 L | vs 12 L |
+|---|---|---|---|---|---|---|
+| Standard recipe | 4.07M | 1,500 | ~80 min | 0.005289 | reference | +1.6 % |
+| Large-area rule, 7 L box | **1.39M** | 253 | **3 min** | 0.005289 | **0.0 %** | +1.6 % |
+
+Same drag to four digits, y⁺ 31, layer coverage 92 %, every check passed.
+
 ## Reproduce
 
 ```bash

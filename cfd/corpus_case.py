@@ -21,6 +21,7 @@ import numpy as np
 import appendages as ap
 from casegen import head, write, field
 
+S_BIG = 0.8          # wetted area (L^2) above which the coarse-flat surface rule applies; REMUS 0.41, manta 2.2-2.6
 BOX = dict(x=(-2.0, 5.0), y=(-2.0, 2.0), z=(-2.0, 2.0))   # corpus: 7 L long; half-width set per shape, see shape_box()
 BASE = 0.107
 TURB_I, NUT_RATIO = 0.041, 100.0           # inlet intensity and nu_t/nu as in the paper case (k 0.01, omega 57 at 2 m/s)
@@ -76,6 +77,8 @@ def make_case(design, name, orient, Re, out):
     save_stl(V, F, os.path.join(case, 'constant', 'triSurface', 'body.stl'))
     lo, hi = V.min(0), V.max(0); half = (hi - lo) / 2
     nu = 1.0 / Re; k = 1.5 * TURB_I ** 2; om = k / (NUT_RATIO * nu); h1 = first_layer(Re)
+    big = info['S_wet'] > S_BIG                            # large-area shapes (wings): flat areas one level coarser
+    lv_lo, lv_hi, lv_feat, lv_near, n_between = (4, 5, 5, 3, 3) if big else (5, 6, 5, 4, 4)            # edges, tips, junctions stay at level 6 -> ~1M cells max
     surf = BASE / 2 ** 6                                   # body surface cell (level 6)
     n_layers = max(2, math.ceil(math.log(0.4 * surf / h1) / math.log(1.15)))   # grow layers up to ~0.4 cell; 2 at Re <= 3e6 as validated
     n = [math.ceil((BOX[a][1] - BOX[a][0]) / BASE) for a in 'xyz']
@@ -88,7 +91,7 @@ def make_case(design, name, orient, Re, out):
     box = lambda nm, b: f'    {nm} {{ type searchableBox; min ({b[0][0]:.5f} {b[0][1]:.5f} {b[0][2]:.5f}); max ({b[1][0]:.5f} {b[1][1]:.5f} {b[1][2]:.5f}); }}\n'
     meta = dict(design=design.get('variant', {}).get('base', name), variant=design.get('variant', {}).get('index'),
                 orientation=orient, yaw_deg=yaw, pitch_deg=pitch, Re=Re, nu=nu, U=1.0, rho=1.0, L=1.0,
-                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, n_layers=n_layers, base_cell=BASE, box=BOX, recipe='nd-v2-box7',
+                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, n_layers=n_layers, base_cell=BASE, box=BOX, recipe='nd-v3-1M', surface_levels=[lv_lo, lv_hi], n_cells_between_levels=n_between, feature_level=lv_feat, near_wake_level=lv_near,
                 **info, recipe_json=design)
     write(os.path.join(case, 'case.json'), json.dumps(meta, indent=1, default=float))
 
@@ -139,15 +142,15 @@ castellatedMeshControls
     maxLocalCells 2000000;
     maxGlobalCells 8000000;
     minRefinementCells 10;
-    nCellsBetweenLevels 4;
-    features ( {{ file "body.eMesh"; level 5; }} );
-    refinementSurfaces {{ body {{ level (5 6); patchInfo {{ type wall; }} }} }}
+    nCellsBetweenLevels {n_between};
+    features ( {{ file "body.eMesh"; level {lv_feat}; }} );
+    refinementSurfaces {{ body {{ level ({lv_lo} {lv_hi}); patchInfo {{ type wall; }} }} }}
     resolveFeatureAngle 30;
     refinementRegions
     {{
         core {{ mode inside; levels ((1e15 1)); }}
         wake {{ mode inside; levels ((1e15 2)); }}
-        nearWake {{ mode inside; levels ((1e15 4)); }}
+        nearWake {{ mode inside; levels ((1e15 {lv_near})); }}
     }}
     locationInMesh ({BOX['x'][1] - 0.48269:.5f} {BOX['y'][1] - 0.19483:.5f} {BOX['z'][1] - 0.20389:.5f});
     allowFreeStandingZoneFaces true;
