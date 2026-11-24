@@ -5,7 +5,7 @@ then rotated: yaw turns it about z (flow arrives from the side), pitch about y (
 U_inf = 1, rho = 1, nu = 1/Re, so OpenFOAM's forces are already coefficients times the reference area.
 
 Mesh = the validated ~700K recipe expressed in units of L:
-  base cell 0.107 L in a fixed box x in [-2, 4], y and z in [-2, 2];
+  base cell 0.107 L; box x in [-2, 5] (7 L), y and z in [-h, h] with h = max(2 L, 2 W), W = body span;
   'core' box at level 1 (= the old base cell 0.0535 L), 'wake' box at level 2, 'nearWake' at level 4,
   body surface at levels (5 6) (= the old (4 5)), 2 prism layers with the first height set for y+ = 30 at this Re.
 Output files are binary and compressed.
@@ -21,7 +21,7 @@ import numpy as np
 import appendages as ap
 from casegen import head, write, field
 
-BOX = dict(x=(-2.0, 4.0), y=(-2.0, 2.0), z=(-2.0, 2.0))
+BOX = dict(x=(-2.0, 5.0), y=(-2.0, 2.0), z=(-2.0, 2.0))   # corpus: 7 L long; half-width set per shape, see shape_box()
 BASE = 0.107
 TURB_I, NUT_RATIO = 0.041, 100.0           # inlet intensity and nu_t/nu as in the paper case (k 0.01, omega 57 at 2 m/s)
 ORIENTATIONS = {'front': (0, 0), 'yaw5': (5, 0), 'yaw10': (10, 0), 'yaw20': (20, 0), 'yaw30': (30, 0),
@@ -88,7 +88,7 @@ def make_case(design, name, orient, Re, out):
     box = lambda nm, b: f'    {nm} {{ type searchableBox; min ({b[0][0]:.5f} {b[0][1]:.5f} {b[0][2]:.5f}); max ({b[1][0]:.5f} {b[1][1]:.5f} {b[1][2]:.5f}); }}\n'
     meta = dict(design=design.get('variant', {}).get('base', name), variant=design.get('variant', {}).get('index'),
                 orientation=orient, yaw_deg=yaw, pitch_deg=pitch, Re=Re, nu=nu, U=1.0, rho=1.0, L=1.0,
-                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, n_layers=n_layers, base_cell=BASE, box=BOX, recipe='nd-700K-v1',
+                bbox_lo=lo.tolist(), bbox_hi=hi.tolist(), first_layer=h1, n_layers=n_layers, base_cell=BASE, box=BOX, recipe='nd-v2-box7',
                 **info, recipe_json=design)
     write(os.path.join(case, 'case.json'), json.dumps(meta, indent=1, default=float))
 
@@ -137,7 +137,7 @@ geometry
 castellatedMeshControls
 {{
     maxLocalCells 2000000;
-    maxGlobalCells 4000000;
+    maxGlobalCells 8000000;
     minRefinementCells 10;
     nCellsBetweenLevels 4;
     features ( {{ file "body.eMesh"; level 5; }} );
@@ -240,15 +240,20 @@ planes
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('base'); p.add_argument('variant', type=int); p.add_argument('--out', default='runs/pilot')
-    p.add_argument('--box', default='-2,4,2', help='x_min,x_max,half_width in body lengths (default 6 L x 4 L x 4 L)')
+    p.add_argument('--box', default='', help='x_min,x_max,half_width in body lengths (default: corpus rule, 7 L long, half-width max(2 L, 2 W))')
     p.add_argument('--cap', type=int, default=ITER_CAP, help='iteration cap')
     p.add_argument('--only', default='', help='comma list of orientation_Re ids, e.g. front_Re3e6,side_Re3e6')
     a = p.parse_args()
-    x0, x1, hw = map(float, a.box.split(','))
+    d = json.load(open(os.path.join(HERE, '..', 'design', 'variants', a.base, f'v{a.variant:02d}.json')))
+    if a.box:
+        x0, x1, hw = map(float, a.box.split(','))
+    else:                                                  # corpus rule: 2 L ahead, 5 L behind; side walls at max(2 L, 2 W)
+        V0, _, _ = body(d, 0.0, 0.0)                       # W = largest cross-flow size of the unrotated body (span)
+        W = float(max(np.ptp(V0[:, 1]), np.ptp(V0[:, 2])))
+        x0, x1, hw = -2.0, 5.0, round(max(2.0, 2.0 * W), 3)
     BOX.update(x=(x0, x1), y=(-hw, hw), z=(-hw, hw))
     only = set(filter(None, a.only.split(',')))
     ITER_CAP = a.cap
-    d = json.load(open(os.path.join(HERE, '..', 'design', 'variants', a.base, f'v{a.variant:02d}.json')))
     name = f'{a.base}_v{a.variant:02d}'
     for o, Re in CONDITIONS:
             tag = f'{o}_Re{Re:.0e}'.replace('+0', '').replace('+', '')
