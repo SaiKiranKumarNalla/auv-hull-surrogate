@@ -33,7 +33,7 @@ RES = (1e6, 3e6, 1e7)
 CONDITIONS = ([(o, Re) for o in ('front', 'yaw10', 'yaw20') for Re in RES]
               + [('pitch10', 3e6), ('pitch20', 3e6), ('yaw10pitch10', 3e6), ('yaw30', 3e6), ('yaw5', 3e6), ('pitchm10', 3e6)])
 assert len(CONDITIONS) == 15
-ITER_CAP, ITER_MIN = 600, 200
+ITER_CAP, ITER_MIN = 1500, 200
 
 
 def rot(yaw, pitch):
