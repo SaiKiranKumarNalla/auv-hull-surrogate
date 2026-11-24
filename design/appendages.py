@@ -72,6 +72,9 @@ def _smooth(v, k):
     return np.convolve(pad, np.ones(k) / k, mode='valid')
 
 
+TAIL_TIP_R = 0.005          # tail-tip radius / hull length: prism layers cannot wrap a mathematical point
+
+
 def hull_sections(spec):
     """Stations x with half-width ry(x) (y) and half-height rz(x) (z) of the whole body, bill included.
 
@@ -88,6 +91,20 @@ def hull_sections(spec):
         x = np.concatenate([x, x[-1] + 1.5 * rp * u])
         cap = np.sqrt(np.clip(1 - u ** 2, 0, None))
         ry, rz = np.concatenate([ry, ry[-1] * cap]), np.concatenate([rz, rz[-1] * cap])
+    Lh = x[-1] - x[0]; rt = TAIL_TIP_R * Lh                      # pointed tail -> rounded tip of radius ~rt
+    if not (spec['family'] == 'fish_like' and r[-1] > 1e-6) and max(ry[-1], rz[-1]) < rt and max(ry.max(), rz.max()) > 2 * rt:
+        # cut the tail where it is rt thick and close it with r = r0 sqrt(1 - u): the cap starts with the hull's
+        # own slope (cap length chosen to match it) and ends vertical, so the outline has no corner
+        xf = np.linspace(x[np.argmax(np.maximum(ry, rz))], x[-1], 2000)
+        yf, zf = np.interp(xf, x, ry), np.interp(xf, x, rz); rf = np.maximum(yf, zf)
+        i = int(np.nonzero(rf >= rt)[0][-1])
+        s0 = max(-(rf[i] - rf[i - 1]) / (xf[1] - xf[0]), 1e-3)
+        Lc = rf[i] / (2 * s0)
+        u = 1 - (1 - np.linspace(0, 1, 25)[1:]) ** 2              # points clustered at the closed end
+        cap = np.sqrt(np.clip(1 - u, 0, None))
+        keep = x < xf[0]
+        x = np.concatenate([x[keep], xf[:i + 1], xf[i] + Lc * u])
+        ry = np.concatenate([ry[keep], yf[:i + 1], yf[i] * cap]); rz = np.concatenate([rz[keep], zf[:i + 1], zf[i] * cap])
     bill = spec.get('bill')
     if bill:
         Lb, rb, bw = bill['length'], bill['base_radius'], bill.get('width', 1.0)
